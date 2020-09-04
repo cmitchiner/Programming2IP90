@@ -7,7 +7,7 @@
 import java.util.Scanner;
 import java.lang.Math;
 
-public class Circle {
+public class Circle { //Can you see this
 
     /**
     * This method first assigns various variables through user input,
