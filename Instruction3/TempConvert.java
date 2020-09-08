@@ -33,12 +33,7 @@ public class TempConvert
                 System.out.println("Error");
             }
         }
-<<<<<<< HEAD
         //CharlieComment
-=======
-        // comment
->>>>>>> de9bd30d7439b0352263b22e32597e808d547e8c
-
     }
     public static void main(String[] args)
     {
