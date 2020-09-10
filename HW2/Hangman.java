@@ -1,10 +1,10 @@
-// Hangman TEMPLATE
+// Hangman
 // Homework Assignment 2 2ip90 
 /**
- * @name(s) //TODO
- * @id(s)   //TODO
- * @group   //TODO
- * @date    //TODO
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * as group number 97
+ * Date: 10th September 2020
  */
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ class Hangman
     //Select a secret word
     String secret = bagOfWords[random.nextInt(bagOfWords.length)];
 
-    // TODO Insert your code here
+    // Code has been inserted.
 
     //Set an array of character guesses to compare against secret
     char[] guessString = new char[secret.length()];
@@ -59,11 +59,9 @@ class Hangman
       {
         if (secret.charAt(i) == guessChar)
         {
-          if (guessedLetters.get(guessedLetters.indexOf(guessChar)))
-          {
-            
+          if (guessedLetters.contains(guessChar)) {
+            tries++;
           }
-          //Store correct characters in a string
           guessString[i] = guessChar;
           System.out.print(guessString[i]);
           rightOrWrong = true;

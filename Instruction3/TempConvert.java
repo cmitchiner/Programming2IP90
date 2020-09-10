@@ -32,11 +32,10 @@ public class TempConvert
             {
                 System.out.println("Error");
             }
+            sc.close();
         }
-        // commentasdf
-
-        //CharlieComment
     }
+    
     public static void main(String[] args)
     {
         TempConvert t = new TempConvert();
