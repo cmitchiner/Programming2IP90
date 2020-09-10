@@ -29,16 +29,16 @@ public class Circle { //Can you see this
         //Assign Variables
         float midpointX1, midpointY1, circleRadius1, midpointX2, midpointY2, circleRadius2, pointX, pointY, distance1, distance2; 
         boolean inCircle1, inCircle2;
-        Scanner sc = new Scanner(System.in);
-
+        Scanner sc;
+        sc = new Scanner(System.in);
         //Fill variables with user input
-        midpointX1 = sc.nextFloat(); // Circle 1 vertex X coordinate
+        midpointX1 = sc.nextFloat(); // Circle 1 midpoint X coordinate
 
-        midpointY1 = sc.nextFloat(); // Circle 1 vertex Y coordinate
+        midpointY1 = sc.nextFloat(); // Circle 1 midpoint Y coordinate
 
         circleRadius1 = sc.nextFloat(); // Circle 1 radius
-        midpointX2 = sc.nextFloat(); // Circle 2 vertex X coordinate
-        midpointY2 = sc.nextFloat(); // Circle 2 vertex Y coordinate
+        midpointX2 = sc.nextFloat(); // Circle 2 midpoint X coordinate
+        midpointY2 = sc.nextFloat(); // Circle 2 midpoint Y coordinate
 
         circleRadius2 = sc.nextFloat(); // Circle 2 radius
 
@@ -48,13 +48,15 @@ public class Circle { //Can you see this
 
         sc.close(); // Prevent wasted resources
 
-        if (circleRadius1 < 0 || circleRadius2 < 0 ) { // Make sure circle isn't ill defined
+        if (circleRadius1 < 0 || circleRadius2 < 0 )
+        { // Make sure circle isn't ill defined
             System.out.println("input error");
-            return;
+            return; //Gonna exit your program.
         }
+
         
         // Check if point is inside, outside, or on the border of circle 1
-        distance1 = (float) Math.sqrt(Math.pow((midpointX1 - pointX), 2) + Math.pow((midpointY1 - pointY), 2));
+        distance1 =  (float) Math.sqrt(Math.pow((midpointX1 - pointX), 2) + Math.pow((midpointY1 - pointY), 2));
 
         // Check if point is inside, outside, or on the border of circle 2
         distance2 = (float) Math.sqrt(Math.pow((midpointX2 - pointX), 2) + Math.pow((midpointY2 - pointY), 2));
@@ -83,7 +85,6 @@ public class Circle { //Can you see this
         }
 
     }
-
     public static void main(String[] args) {
         (new Circle()).run();
     }
