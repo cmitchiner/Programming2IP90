@@ -7,9 +7,9 @@
  * Date: 10th September 2020
  */
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.*;
 
 class Hangman 
 {
@@ -18,11 +18,10 @@ class Hangman
   {
     //Intialize Local Variables
     Scanner scanner = new Scanner(System.in);
-    boolean solved = false, rightOrWrong = false;
-    Character guessChar;
-    int tries = 0;
-    ArrayList<Character> guessedLetters = new ArrayList<Character>();
-
+    boolean solved = false, rightOrWrong = false; //Solved Determines whether secret has been found //RightorWrong to see if a guessed letter is correct
+    Character guessChar; //Character varible to input each guessed character
+    int failedTries = 0; //Counter for failed tries
+    ArrayList<Character> repeatedCorrectTries = new ArrayList<Character>();
     //Secret words
     String[] bagOfWords = new String[]{"the", "walrus", "and", "carpenter", "were", "walking", "close", "at", "hand"};
     
@@ -34,55 +33,63 @@ class Hangman
     //Select a secret word
     String secret = bagOfWords[random.nextInt(bagOfWords.length)];
 
-    // Code has been inserted.
-
     //Set an array of character guesses to compare against secret
-    char[] guessString = new char[secret.length()];
+    char[] allCorrectlyGuessedLetters = new char[secret.length()];
 
     //Fill character array with underscores to represent unsolved characters
-    for (int i = 0; i < guessString.length; i++)
+    for (int i = 0; i < allCorrectlyGuessedLetters.length; i++)
     {
-      guessString[i] = '_';
+      allCorrectlyGuessedLetters[i] = '_';
     }
     //Show user how long the secret word is
     for (int i = 0; i < secret.length(); i++)
     {
       System.out.print("_");
     }
-
+    //Loop Runs until you run out of guesses or solve the puzzle
     while (!solved)
     {
       System.out.print("\n");
-      guessChar = scanner.next().charAt(0); 
-      rightOrWrong = false;
+
+      guessChar = scanner.next().charAt(0);  //Input user's guessed character
+      rightOrWrong = false; //Reset boolean for knowing if a character is in secret or not
+
+      if (repeatedCorrectTries.contains(guessChar))
+      {
+        failedTries++;
+      }
+      
       for (int i = 0; i < secret.length(); i++)
       {
-        if (secret.charAt(i) == guessChar)
+        if (secret.charAt(i) == guessChar)//If the guessed character equals one of the characters in secret
         {
-          if (guessedLetters.contains(guessChar)) {
-            tries++;
+          allCorrectlyGuessedLetters[i] = guessChar; //Add the correct guessed character to our correct gussed string
+          System.out.print(allCorrectlyGuessedLetters[i]);//Print out the correct letter inbetween underscores
+          rightOrWrong = true; //Indicate it was a correct guess
+          if (!repeatedCorrectTries.contains(guessChar))
+          {
+            repeatedCorrectTries.add(guessChar);
           }
-          guessString[i] = guessChar;
-          System.out.print(guessString[i]);
-          rightOrWrong = true;
-          guessedLetters.add(guessChar);
         }
         else
         {
-          System.out.print(guessString[i]); //This prints a _ in the index that doesnt match the guess
+          System.out.print(allCorrectlyGuessedLetters[i]); //This prints a _ in any index that doesnt match the guessed Character and that isnt already guessed
         }
       }
-      if (!rightOrWrong)
+
+      if (!rightOrWrong)//If it was an incorrect guess increment failedTries, remeber 10 failed tries means you loose
       {
-        tries++;
+        failedTries++;
       }
-      String complete = new String(guessString);
-      if (complete.equalsIgnoreCase(secret))
+
+      String convertCharArrayToString = new String(allCorrectlyGuessedLetters); //Change our array of characters into a string to compare against secret
+
+      if (convertCharArrayToString.equalsIgnoreCase(secret))//If our guessedString matches secret, aka you won
       {
         solved = true;
         System.out.println("\nWell done, you won!");
       }
-      if (tries >= 10)
+      if (failedTries >= 10)//If you have 10 failed tries exit the game
       {
         solved = true;
         System.out.println("\nUnlucky, you lost!");
