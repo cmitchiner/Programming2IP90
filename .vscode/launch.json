@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Cellulitis",
+            "request": "launch",
+            "mainClass": "Cellulitis",
+            "projectName": "Programming2IP90_bef92a73"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}"
