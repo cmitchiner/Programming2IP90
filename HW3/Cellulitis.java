@@ -24,7 +24,7 @@ class Cellulitis {
     currentGeneration[0] = false; //Set first index to false 
     currentGeneration[rowLength + 1] = false; //Set last index to false
     numOfGens = scanner.nextInt(); //G: number of generations
-    String initStart = scanner.next(); //I have no reason what to use this for because of the hasNextInt function in scanner works way better and way easier and this assignment sucks ass
+    String initStart = scanner.next(); //Why is this here, when we can use .hasNextInt()
     int initalOccupationIndex; //used for storing the initally occupied indicies
     
 
@@ -36,7 +36,7 @@ class Cellulitis {
         currentGeneration[initalOccupationIndex] = true;
       }
     }
-    String initEnd = scanner.next(); //I have no reason what to use this for because of the hasNextInt function in scanner works way better and way easier and this assignment sucks ass
+    String initEnd = scanner.next(); //Why is this here, when we can use .hasNextInt()
     
     if (whichAuto == 'a')//If its auto A, follow rules for A
     {
@@ -99,9 +99,14 @@ class Cellulitis {
     {
         if (generation[j] == true)
         {
+          try {
             newArray[j-1] = rules(generation[j-2], generation[j-1], generation[j]);
             newArray[j] =  rules(generation[j-1], generation[j], generation[j+1]);
             newArray[j+1] = rules(generation[j], generation[j+1], generation[j+2]);
+          } catch (ArrayIndexOutOfBoundsException e) {
+            j++;
+          }
+            
         }
     }
     return newArray;
@@ -111,7 +116,7 @@ class Cellulitis {
     //Calculates the next generation from the provided generation according to
     //Rules for automaton A
     draw(generation); //First line
-    for (int i = 0; i < numOfGens; i++)
+    for (int i = 1; i < numOfGens; i++)
     {
         generation = generate(generation);
         System.out.println();
