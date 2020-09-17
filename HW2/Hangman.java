@@ -16,10 +16,11 @@ class Hangman {
   void play() {
     // Intialize Local Variables
     Scanner scanner = new Scanner(System.in);
-    boolean solved = false, rightOrWrong = false; // Solved Determines whether secret has been found //RightorWrong to see if a guessed letter is correct
+    boolean solved = false, correctAnswer = true; // Solved Determines whether secret has been found //correctAnswer to see if a guessed letter is correct
     Character guessChar; // Character varible to input each guessed character
     int failedTries = 0; // Counter for failed tries
     ArrayList<Character> repeatedCorrectTries = new ArrayList<Character>(); // EXTRA CREDIT: initializes ArrayList of correctly guessed letters
+
     // Secret words
     String[] bagOfWords = new String[]{"the", "walrus", "and", "carpenter", "were", "walking", "close", "at", "hand"};
     
@@ -48,28 +49,32 @@ class Hangman {
     while (!solved) {
       System.out.print("\n");
 
+      
       guessChar = Character.toLowerCase(scanner.next().charAt(0));  // Input user's guessed character as a lowercase character
-      rightOrWrong = false; // Reset boolean for knowing if a character is in secret or not
-
+      
       if (repeatedCorrectTries.contains(guessChar)) { // EXTRA CREDIT: if this letter *has* already been guessed...
         failedTries++; // EXTRA CREDIT: ...increments number of failed tries
       }
-      
-      for (int i = 0; i < secret.length(); i++) {
-        if (secret.charAt(i) == guessChar) { // If the guessed character equals one of the characters in secret
-          allCorrectlyGuessedLetters[i] = guessChar; // Add the correct guessed character to our correct guessed string
-          System.out.print(allCorrectlyGuessedLetters[i]); // Print out the correct letter inbetween underscores
-          rightOrWrong = true; // Indicate it was a correct guess
+      correctAnswer = false; // Reset boolean for knowing if a character is in secret or not
 
-          if (!repeatedCorrectTries.contains(guessChar)) { // EXTRA CREDIT: if this letter hasn't already been guessed...
-            repeatedCorrectTries.add(guessChar); // EXTRA CREDIT: ...adds it to the list of guessed characters
+      if (failedTries == 9 && (!secret.contains(guessChar.toString()))){ //Prevents forloop from printing an additional line, if game ends
+      } else {                                                           //For mometer purposes
+        for (int i = 0; i < secret.length(); i++) {
+          if (secret.charAt(i) == guessChar) { // If the guessed character equals one of the characters in secret
+            allCorrectlyGuessedLetters[i] = guessChar; // Add the correct guessed character to our correct guessed string
+            System.out.print(allCorrectlyGuessedLetters[i]); // Print out the correct letter inbetween underscores
+            correctAnswer = true; // Indicate it was a correct guess
+
+            if (!repeatedCorrectTries.contains(guessChar)) { // EXTRA CREDIT: if this letter hasn't already been guessed...
+              repeatedCorrectTries.add(guessChar); // EXTRA CREDIT: ...adds it to the list of guessed characters
+            }
+          } else {
+            System.out.print(allCorrectlyGuessedLetters[i]); // This prints a _ in any index that doesnt match the guessed Character and that isnt already guessed
           }
-        } else {
-          System.out.print(allCorrectlyGuessedLetters[i]); // This prints a _ in any index that doesnt match the guessed Character and that isnt already guessed
         }
-      }
+    }
 
-      if (!rightOrWrong) { // If it was an incorrect guess increment failedTries, remeber 10 failed tries means you loose
+      if (!correctAnswer) { // If it was an incorrect guess increment failedTries, remeber 10 failed tries means you loose
         failedTries++;
       }
 
@@ -81,11 +86,11 @@ class Hangman {
       }
       if (failedTries >= 10) { // If you have 10 failed tries exit the game
         solved = true;
-        System.out.println("\nUnlucky, you lost!");
-        System.out.print("The secret word was: " + secret);
+        System.out.println("Unlucky, you lost!");
+        System.out.print("The secret word was: " + secret + "\n");
+        return;
       }
     }
-    scanner.close(); 
   }
   
   public static void main(String[] args) { 
