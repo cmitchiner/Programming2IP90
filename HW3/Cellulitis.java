@@ -63,7 +63,9 @@ class Cellulitis {
         }
     }
   }
-  boolean rules(boolean a, boolean b, boolean c){ //boolean[] ruleSetA = {false, true, true, false, true, true, true, false}; 
+  boolean rules(boolean a, boolean b, boolean c)
+  {
+
     if (a == true && b == true && c == true){
       return false;
     }
@@ -90,23 +92,28 @@ class Cellulitis {
     }
     return false;
   }
-
+  boolean[] generate(boolean[] generation)
+  {
+    boolean[] newArray = new boolean[rowLength + 2];
+    for (int j = 1; j <= rowLength; j++)
+    {
+        if (generation[j] == true)
+        {
+            newArray[j-1] = rules(generation[j-2], generation[j-1], generation[j]);
+            newArray[j] =  rules(generation[j-1], generation[j], generation[j+1]);
+            newArray[j+1] = rules(generation[j], generation[j+1], generation[j+2]);
+        }
+    }
+    return newArray;
+  }
   boolean[] nextGenerationA(boolean[] generation){
-      boolean[] newArray = new boolean[rowLength + 2];
+      
     //Calculates the next generation from the provided generation according to
     //Rules for automaton A
     draw(generation); //First line
     for (int i = 0; i < numOfGens; i++)
     {
-        for (int j = 1; j <= rowLength; j++)
-        {
-            if (generation[j] == true){
-                newArray[j-1] = rules(generation[j-2], generation[j-1], generation[j]);
-                newArray[j] =  rules(generation[j-1], generation[j], generation[j+1]);
-                newArray[j+1] = rules(generation[j], generation[j+1], generation[j+2]);
-            }
-        }
-        generation = newArray;
+        generation = generate(generation);
         System.out.println();
         draw(generation);
     }
