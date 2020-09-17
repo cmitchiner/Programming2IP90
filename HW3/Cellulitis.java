@@ -1,5 +1,5 @@
 // Cellulitis TEMPLATE
-// Homework Assignment 3 2ip90 
+// Homework Assignment 3 2ip9false 
 /**
  * @name(s) //TODO
  * @id(s)   //TODO
@@ -13,6 +13,9 @@ class Cellulitis {
   Scanner scanner = new Scanner(System.in);
   int rowLength;
   int numOfGens;
+  boolean[] ruleSetA = {false, true, true, false, true, true, true, false}; 
+  boolean[] rulesetB = {false, true, false, true, false, true, true, false};
+
   void run(){
 
     Character whichAuto = Character.toLowerCase(scanner.next().charAt(0)); //Letter A, B, or U: Specify which rules to follow
@@ -23,6 +26,7 @@ class Cellulitis {
     numOfGens = scanner.nextInt(); //G: number of generations
     String initStart = scanner.next(); //I have no reason what to use this for because of the hasNextInt function in scanner works way better and way easier and this assignment sucks ass
     int initalOccupationIndex; //used for storing the initally occupied indicies
+    
 
     while (scanner.hasNextInt())//Fills currentGeneration with inital occupied cells
     {
@@ -59,6 +63,33 @@ class Cellulitis {
         }
     }
   }
+  boolean[] rules(boolean a, boolean b, boolean c){
+    if (a == true && b == true && c == true){
+      return ruleSetA[0];
+    }
+    else if (a = true && b == true && c == false){
+      return ruleSetA[1];
+    }
+    else if (a == false && b == true && c == true){
+      return ruleSetA[2];
+    }
+    else if (a = false && b == true && c == false){
+      return ruleSetA[3];
+    }
+    else if (a == true && b == false && c == true){
+      return ruleSetA[4];
+    }
+    else if (a = true && b == false && c == false){
+      return ruleSetA[5];
+    }
+    else if (a == false && b == false && c == true){
+      return ruleSetA[6];
+    }
+    else if (a = false && b == false && c == false){
+      return ruleSetA[7];
+    }
+  }
+
   boolean[] nextGenerationA(boolean[] generation){
     //Calculates the next generation from the provided generation according to
     //Rules for automaton A
