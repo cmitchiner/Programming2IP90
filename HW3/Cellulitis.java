@@ -1,10 +1,10 @@
-// Cellulitis TEMPLATE
-// Homework Assignment 3 2ip9false 
+// Cellulitis
+// Homework Assignment 3 2ip90
 /**
- * @name(s) //TODO
- * @id(s)   //TODO
- * @group   //TODO
- * @date    //TODO
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * as group number 97
+ * Date: 17th September 2020
  */
 
 import java.util.Scanner;
