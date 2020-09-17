@@ -13,7 +13,7 @@ class Cellulitis {
   Scanner scanner = new Scanner(System.in);
   int rowLength;
   int numOfGens;
-  boolean[] ruleSetA = {false, true, true, false, true, true, true, false}; 
+  
   boolean[] rulesetB = {false, true, false, true, false, true, true, false};
 
   void run(){
@@ -63,39 +63,54 @@ class Cellulitis {
         }
     }
   }
-  boolean[] rules(boolean a, boolean b, boolean c){
+  boolean rules(boolean a, boolean b, boolean c){ //boolean[] ruleSetA = {false, true, true, false, true, true, true, false}; 
     if (a == true && b == true && c == true){
-      return ruleSetA[0];
+      return false;
     }
-    else if (a = true && b == true && c == false){
-      return ruleSetA[1];
+    else if (a == true && b == true && c == false){
+      return true;
     }
     else if (a == false && b == true && c == true){
-      return ruleSetA[2];
+      return true;
     }
-    else if (a = false && b == true && c == false){
-      return ruleSetA[3];
+    else if (a == false && b == true && c == false){
+      return false;
     }
     else if (a == true && b == false && c == true){
-      return ruleSetA[4];
+      return true;
     }
-    else if (a = true && b == false && c == false){
-      return ruleSetA[5];
+    else if (a == true && b == false && c == false){
+      return true;
     }
     else if (a == false && b == false && c == true){
-      return ruleSetA[6];
+      return true;
     }
-    else if (a = false && b == false && c == false){
-      return ruleSetA[7];
+    else if (a == false && b == false && c == false){
+      return false;
     }
+    return false;
   }
 
   boolean[] nextGenerationA(boolean[] generation){
+      boolean[] newArray = new boolean[rowLength + 2];
     //Calculates the next generation from the provided generation according to
     //Rules for automaton A
     draw(generation); //First line
+    for (int i = 0; i < numOfGens; i++)
+    {
+        for (int j = 1; j <= rowLength; j++)
+        {
+            if (generation[j] == true){
+                newArray[j-1] = rules(generation[j-2], generation[j-1], generation[j]);
+                newArray[j] =  rules(generation[j-1], generation[j], generation[j+1]);
+                newArray[j+1] = rules(generation[j], generation[j+1], generation[j+2]);
+            }
+        }
+        generation = newArray;
+        System.out.println();
+        draw(generation);
+    }
     //Change the generation array for the next row following rules for A
-    
     return generation;
   }
   boolean[] nextGenerationB(boolean[] generation){
