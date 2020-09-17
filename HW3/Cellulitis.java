@@ -63,7 +63,7 @@ class Cellulitis {
         }
     }
   }
-  boolean rules(boolean a, boolean b, boolean c)
+  boolean rulesAutomataA(boolean a, boolean b, boolean c)
   {
 
     if (a == true && b == true && c == true){
@@ -92,33 +92,83 @@ class Cellulitis {
     }
     return false;
   }
-  boolean[] generate(boolean[] generation)
+
+  boolean rulesAutomataB(boolean a, boolean b, boolean c)
+  {
+
+    if (a == true && b == true && c == true){
+      return false;
+    }
+    else if (a == true && b == true && c == false){
+      return true;
+    }
+    else if (a == false && b == true && c == true){
+      return false;
+    }
+    else if (a == false && b == true && c == false){
+      return true;
+    }
+    else if (a == true && b == false && c == true){
+      return false;
+    }
+    else if (a == true && b == false && c == false){
+      return true;
+    }
+    else if (a == false && b == false && c == true){
+      return true;
+    }
+    else if (a == false && b == false && c == false){
+      return false;
+    }
+    return false;
+  }
+
+  boolean[] generate(boolean[] generation, char r)
   {
     boolean[] newArray = new boolean[rowLength + 2];
-    for (int j = 1; j <= rowLength; j++)
-    {
-        if (generation[j] == true)
-        {
-          try {
-            newArray[j-1] = rules(generation[j-2], generation[j-1], generation[j]);
-            newArray[j] =  rules(generation[j-1], generation[j], generation[j+1]);
-            newArray[j+1] = rules(generation[j], generation[j+1], generation[j+2]);
-          } catch (ArrayIndexOutOfBoundsException e) {
-            j++;
+    if (r == 'a'){
+      for (int j = 1; j <= rowLength; j++)
+      {
+          if (generation[j] == true)
+          {
+            try {
+              newArray[j-1] = rulesAutomataA(generation[j-2], generation[j-1], generation[j]);
+              newArray[j] =  rulesAutomataA(generation[j-1], generation[j], generation[j+1]);
+              newArray[j+1] = rulesAutomataA(generation[j], generation[j+1], generation[j+2]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }
+              
           }
-            
-        }
+      }
+      return newArray;
     }
-    return newArray;
+    else if (r == 'b'){
+      for (int j = 1; j <= rowLength; j++)
+      {
+          if (generation[j] == true)
+          {
+            try {
+              newArray[j-1] = rulesAutomataB(generation[j-2], generation[j-1], generation[j]);
+              newArray[j] =  rulesAutomataB(generation[j-1], generation[j], generation[j+1]);
+              newArray[j+1] = rulesAutomataB(generation[j], generation[j+1], generation[j+2]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }
+              
+          }
+      }
+      return newArray;
+    }
+    return null;
   }
   boolean[] nextGenerationA(boolean[] generation){
-      
     //Calculates the next generation from the provided generation according to
     //Rules for automaton A
     draw(generation); //First line
     for (int i = 1; i < numOfGens; i++)
     {
-        generation = generate(generation);
+        generation = generate(generation, 'a');
         System.out.println();
         draw(generation);
     }
@@ -127,7 +177,15 @@ class Cellulitis {
   }
   boolean[] nextGenerationB(boolean[] generation){
     //Calculates the next generation from the provided generation according to
-    //Rules for automaton B
+    //Rules for automaton A
+    draw(generation); //First line
+    for (int i = 1; i < numOfGens; i++)
+    {
+        generation = generate(generation, 'b');
+        System.out.println();
+        draw(generation);
+    }
+    //Change the generation array for the next row following rules for A
     return generation;
   }
   
