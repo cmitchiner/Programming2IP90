@@ -68,6 +68,7 @@ class Cellulitis {
     }
       nextGenerationU(currentGeneration); //Call method for auto U
     }
+    System.out.println();
   }
 
   void draw(boolean[] generation) { //Draws the state of provided generation
@@ -177,11 +178,19 @@ class Cellulitis {
           if (generation[j] == true) {
             try { //Prevent our program from trying to accsess an index out of bounds
               newArray[j-1] = rulesAutomataU(generation[j-2], generation[j-1], generation[j]); //Check & Adjust the left cells neighbors
-              newArray[j] =  rulesAutomataU(generation[j-1], generation[j], generation[j+1]); //Check & Adjust  the middle cells neighbors
-              newArray[j+1] = rulesAutomataU(generation[j], generation[j+1], generation[j+2]); //Check & Adjust the right cells neighbors
             } catch (ArrayIndexOutOfBoundsException e) {
               j++;
             }  
+            try {
+              newArray[j] =  rulesAutomataU(generation[j-1], generation[j], generation[j+1]); //Check & Adjust  the middle cells neighbors
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }
+            try {
+              newArray[j+1] = rulesAutomataU(generation[j], generation[j+1], generation[j+2]); //Check & Adjust the right cells neighbors
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }
           }
       }
       return newArray; //Return array so our nextGenerationU function has access to our newly modified array
@@ -194,12 +203,20 @@ class Cellulitis {
       for (int j = 1; j <= rowLength; j++) {
           if (generation[j] == true) {
             try { //Prevent our program from trying to accsess an index out of bounds
-              newArray[j-1] = rulesAutomataB(generation[j-2], generation[j-1], generation[j]); //Check & Adjust the left cells neighbors
-              newArray[j] =  rulesAutomataB(generation[j-1], generation[j], generation[j+1]); //Check & Adjust  the middle cells neighbors
-              newArray[j+1] = rulesAutomataB(generation[j], generation[j+1], generation[j+2]); //Check & Adjust the right cells neighbors
+              newArray[j-1] = rulesAutomataU(generation[j-2], generation[j-1], generation[j]); //Check & Adjust the left cells neighbors
             } catch (ArrayIndexOutOfBoundsException e) {
               j++;
             }  
+            try {
+              newArray[j] =  rulesAutomataU(generation[j-1], generation[j], generation[j+1]); //Check & Adjust  the middle cells neighbors
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }
+            try {
+              newArray[j+1] = rulesAutomataU(generation[j], generation[j+1], generation[j+2]); //Check & Adjust the right cells neighbors
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }
           }
       }
       return newArray; //Return array so our nextGenerationB function has access to our newly modified array
@@ -208,13 +225,20 @@ class Cellulitis {
       for (int j = 1; j <= rowLength; j++) {
           if (generation[j] == true) {
             try { //Prevent our program from trying to accsess an index out of bounds
-              newArray[j-1] = rulesAutomataA(generation[j-2], generation[j-1], generation[j]); //Check & Adjust the left cells neighbors
-              newArray[j] =  rulesAutomataA(generation[j-1], generation[j], generation[j+1]); //Check & Adjust  the middle cells neighbors
-              newArray[j+1] = rulesAutomataA(generation[j], generation[j+1], generation[j+2]); //Check & Adjust the right cells neighbors
+              newArray[j-1] = rulesAutomataU(generation[j-2], generation[j-1], generation[j]); //Check & Adjust the left cells neighbors
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }  
+            try {
+              newArray[j] =  rulesAutomataU(generation[j-1], generation[j], generation[j+1]); //Check & Adjust  the middle cells neighbors
             } catch (ArrayIndexOutOfBoundsException e) {
               j++;
             }
-              
+            try {
+              newArray[j+1] = rulesAutomataU(generation[j], generation[j+1], generation[j+2]); //Check & Adjust the right cells neighbors
+            } catch (ArrayIndexOutOfBoundsException e) {
+              j++;
+            }
           }
       }
       return newArray; //Return array so our nextGenerationA function has access to our newly modified array
