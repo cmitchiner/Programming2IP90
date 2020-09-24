@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - SudokuSolver",
+            "request": "launch",
+            "mainClass": "SudokuSolver",
+            "projectName": "Programming2IP90_42d940f1"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Cellulitis",
             "request": "launch",
             "mainClass": "Cellulitis",

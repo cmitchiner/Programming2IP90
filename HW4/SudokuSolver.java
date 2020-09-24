@@ -13,6 +13,9 @@ class SudokuSolver {
     static final int SUDOKU_MAX_NUMBER = 9;    // Maximum digit to be filled in.
     static final int SUDOKU_BOX_DIMENSION = 3; // Dimension of the boxes (sub-grids that should contain all digits).
     static final int  EMPTY = 0;                // If a cell is empty it equals 0
+    static final String ASTERISK = "> <";
+    static final String ASTERISK_LEFT_CORNER = "> ";
+    static final String ASTERISK_RIGHT_CORNER = "< ";
 
     static int[][] grid = new int[][] {  // The puzzle grid; 0 represents empty.
         { 0, 9, 0,   7, 3, 0,    4, 0, 0 },    // One solution.
@@ -27,6 +30,7 @@ class SudokuSolver {
         { 9, 0, 0,   0, 0, 3,    0, 2, 5 },
         { 6, 0, 3,   0, 0, 0,    8, 0, 0 },
     };
+
 
     int solutionCounter = 0; // Solution counter
     private int[][] board;
@@ -45,7 +49,7 @@ class SudokuSolver {
     // Is there a conflict when we fill in d at position (r, c)?
     boolean givesNoConflict(int row, int col, int num) {
 
-        return !rowConflict(row, num) && !columnConflict(col, num) && !boxConflict(row, col, num);
+        return !rowConflict(row, num) && !columnConflict(col, num) && !boxConflict(row, col, num); // && !asteriskConflict(num);
 
     }
 
@@ -79,21 +83,44 @@ class SudokuSolver {
 
         return false;
     }
-	
-	// Is there a conflict in the asterisk when we fill in d?
-	// Delete this comment and add your asteriskConflict method in its place.
+
+    boolean asteriskConflict(int num){
+        // 1: [3][3] /
+        // 2: [2][5] //
+        // 3: [3][7] ///
+        // 4: [5][2] //
+        // 5: [5][5] /
+        // 6: [5][8] ////
+        // 7: [7][3] ///
+        // 8: [8][5] ////
+        // 9: [7][7] /
+
+        if(board[3][3] == num)
+        return true;
+        else if (board[2][5] == num)
+        return true;
+        else if (board[3][7] == num)
+        return true;
+        else if (board[5][2] == num)
+        return true;
+        else if (board[5][5] == num)
+        return true;
+        else if (board[5][8] == num)
+        return true;
+        else if (board[7][3] == num)
+        return true;
+        else if (board[8][5] == num)
+        return true;
+        else if (board[7][7] == num)
+        return true;
+        else return false;
+
+    }
 	
 	// Finds the next empty square (in "reading order").
     int[] findEmptySquare() {
         // TODO
         return new int[]{-1, -1};
-    }
-
-    boolean isEmpty(int row, int col) {
-        if (board[row][col] == EMPTY)
-            return true;
-
-        return false;
     }
 
     // Find all solutions for the grid, and stores the final solution.
