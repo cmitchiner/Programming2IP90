@@ -7,6 +7,7 @@
  * Date: 17th September 2020
  */
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 //JUST A HEADS UP, we adjusted A & B to be called through our Universal Method
@@ -57,7 +58,12 @@ class Cellulitis {
     }
     else if (whichAuto == 'u') { //If its auto U, follow custom imported ruleset
       for(int count = 0; count < 8; count++) { //Inputs 1's and 0's from custom ruleset into int array
-        ruleSetUInt[count] = scanner.nextInt();
+        try {
+          ruleSetUInt[count] = scanner.nextInt();
+        } catch (InputMismatchException e) {
+          System.out.println("Incorrect Input, please restart program and try again");
+          return;
+        }
       }
       for(int count = 0; count < 8; count++) { //Converts 1's and 0's to True and False
       if (ruleSetUInt[count] == 1) {          //and stores in boolean array
