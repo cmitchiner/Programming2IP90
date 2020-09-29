@@ -14,7 +14,8 @@ class SudokuSolver {
     static final int  EMPTY = 0;                // If a cell is empty it equals 0
     
     int[][] grid = new int[][] {  // The puzzle grid; 0 represents empty.
-        { 0, 9, 0,   7, 3, 0,    4, 0, 0 },    // One solution.
+
+        { 0, 0, 0,   7, 3, 0,    4, 0, 0 },    // One solution.
         { 0, 0, 0,   0, 0, 0,    5, 0, 0 },
         { 3, 0, 0,   0, 0, 6,    0, 0, 0 },
 
@@ -31,7 +32,7 @@ class SudokuSolver {
 
     // Is there a conflict when we fill in d at position (r, c)?
     boolean givesConflict(int r, int c, int d) {
-        return !(!rowConflict(r, d) && !columnConflict(c, d) && !boxConflict(r, c, d) && !asteriskConflict(grid)); //If there isnt a conflict in any of the conditions, return false
+        return !(!rowConflict(r, d) && !columnConflict(c, d) && !boxConflict(r, c, d) && !asteriskConflict(r, c, d)); //If there isnt a conflict in any of the conditions, return false
         //False if no conflict, true if there is conflict
     }
 
@@ -48,7 +49,7 @@ class SudokuSolver {
     // Is there a conflict in column c when we fill in d?
     boolean columnConflict(int c, int d) {
         for (int i = SUDOKU_MIN_NUMBER - 1; i < SUDOKU_SIZE; i++) {  //Check every row for the passed paramter index for col
-            if (grid[i][c] == d){
+            if (grid[i][c] == d) {
                 return true;
             }
         }
@@ -56,55 +57,50 @@ class SudokuSolver {
     }
 
     // Is there a conflict in the box at (r, c) when we fill in d?
-    boolean boxConflict(int r, int c, int d) {
-        int row = r - (r % SUDOKU_BOX_DIMENSION);
-        int col = c - (c % SUDOKU_BOX_DIMENSION);
-
-        for (int i = row; i < row + SUDOKU_BOX_DIMENSION; i++) {
-            for (int j = col; j < col + SUDOKU_BOX_DIMENSION; j++) {
-                if (grid[i][j] == d){
+    boolean boxConflict(int row, int col, int d) {
+        //Compute the bounds for each box
+        int subsectionRowStart = (row / SUDOKU_BOX_DIMENSION) * SUDOKU_BOX_DIMENSION;
+        int subsectionRowEnd = subsectionRowStart + SUDOKU_BOX_DIMENSION;
+ 
+        int subsectionColumnStart = (col / SUDOKU_BOX_DIMENSION) * SUDOKU_BOX_DIMENSION;
+        int subsectionColumnEnd = subsectionColumnStart + SUDOKU_BOX_DIMENSION;
+ 
+        //Now that we have comptued the bounds to iterate through, check for boxConflicts at those bounds
+        for (int r = subsectionRowStart; r < subsectionRowEnd; r++) {
+            for (int c = subsectionColumnStart; c < subsectionColumnEnd; c++) {
+                if (grid[r][c] == d) {
                     return true;
                 }
             }
         }
         return false;
     }
-	
+
     // Is there a conflict in the asterisk when we fill in d?
-    //Passes each asterix cell's indicies to the isAsteriskUnique function, with a boolean array to keep track
-	boolean asteriskConflict(int[][]board)
+    boolean asteriskConflict(int r, int c, int d)
     {
+        //Puts the given asterisk row and col indexs into arrays
         int[] asteriskRowIndex = {2, 1, 2, 4, 4, 4, 6, 7, 6};
         int[] asteriskColIndex = {2, 4, 6, 1, 4, 7, 2, 4, 6};
-        boolean[] constraint = new boolean[SUDOKU_SIZE]; //This is all falses at initilization
-        for (int i = 0; i < SUDOKU_SIZE; i++) {
-            if (!isAsteriskUnique(board, asteriskRowIndex[i], constraint, asteriskColIndex[i])) {
-                return true;
+
+        if (isAnAsteriskIndex(r, c)) {//Only check for asterisk conflict if we are at an asterisk index 
+            for (int i = 0; i < SUDOKU_SIZE; i++) {
+                if (grid[asteriskRowIndex[i]][asteriskColIndex[i]] == d) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        return false; //If we are not at an asteriskIndex there cant be a conflict
+        
     }
 
-    //Checks whether or not an integer has already appeared in any of the astrisk indicies, if it has set a boolean array index to false
-    //otherwise if it is unique set that index to true
-    //After all 9 indicies in the boolean array are true, every asterisk cell has a unique number 1-9
-    boolean isAsteriskUnique(int[][] board, int row, boolean[] constraint, int column) {
-        if (board[row][column] != EMPTY) {
-            if (!constraint[board[row][column] - 1]) {
-                constraint[board[row][column] - 1] = true;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-    boolean isAnAsteriskIndex(int row, int col)
-    {
+    //Checks a given row and col to see if it is an asteriskIndex
+    boolean isAnAsteriskIndex(int row, int col) {
         int[] asteriskRowIndex = {2, 1, 2, 4, 4, 4, 6, 7, 6};
         int[] asteriskColIndex = {2, 4, 6, 1, 4, 7, 2, 4, 6};
-        for (int i = 0; i < 9; i++)
-        {
-            if (asteriskRowIndex[i] == row && asteriskColIndex[i] == col){
+        for (int i = 0; i < 9; i++) {
+            if (asteriskRowIndex[i] == row && asteriskColIndex[i] == col) {
                 return true;
             }
         }
@@ -112,9 +108,8 @@ class SudokuSolver {
     }
 
     // Find all solutions for the grid, and stores the final solution.
-    public int[][] board2 = new int[SUDOKU_SIZE][SUDOKU_SIZE];
-    public int solve(int[][] board, int solutionCounter)
-    {
+    public int[][] board2 = new int[SUDOKU_SIZE][SUDOKU_SIZE]; //Create a second array to store first solution so we can test for multiple solutions
+    public int solve(int[][] board, int solutionCounter) {
         for (int row = 0; row < SUDOKU_SIZE; row++) { //Increment through rows
 
             for (int column = SUDOKU_MIN_NUMBER - 1; column < SUDOKU_SIZE; column++) { //Increment through columns
@@ -144,11 +139,6 @@ class SudokuSolver {
                       board[row][column] = EMPTY;
                     }
                   }
-                  //You guys made it so we didnt have to check for asterisk conflicts on Run5 which made it extremely difficult to pass it so i hardcoded it
-                  else if (!rowConflict(8, 1) && !columnConflict(8, 1) && !boxConflict(8, 8, 1) && !isAnAsteriskIndex(8, 8) && row == 8 && column == 8 && num == 1){
-                    board2 = board;
-                    board2[row][column] = num;
-                  }
                 }
                 return solutionCounter;
               }
@@ -158,7 +148,7 @@ class SudokuSolver {
       }
 
     // Print the sudoku grid.
-    void print(int[][] board) {
+    void print() {
         System.out.println("+-----------------+"); //Top bar
         for (int i = SUDOKU_MIN_NUMBER - 1; i < SUDOKU_SIZE; i++) {
             
@@ -169,28 +159,28 @@ class SudokuSolver {
             }
             for (int j = SUDOKU_MIN_NUMBER - 1; j < SUDOKU_SIZE; j++) {
                 if (j != 8) {
-                    if ((i == 1 && j == 3) || (i == 4 && j == 3) || (i == 7 && j == 3) || (i == 4 && j == 6)){ //Hardcode asterisks locations
-                        System.out.print("|" + board[i][j] + ">");
+                    if ((i == 1 && j == 3) || (i == 4 && j == 3) || (i == 7 && j == 3) || (i == 4 && j == 6)) { //Hardcode asterisks locations
+                        System.out.print("|" + board2[i][j] + ">");
                     }
                     else if ((i == 1 && j == 4)|| (i == 4 && j == 4) || (i == 7 && j == 4) || (i == 4 && j == 1) || (i == 4 && j == 7)) { //Hardcode asterisks locations
-                        System.out.print(board[i][j] + "<");
+                        System.out.print(board2[i][j] + "<");
                     }
                     else if ((i == 2 && j == 6) || (i == 6 && j == 6)) { //Hardcode asterisks locations
-                        System.out.print("|" + board[i][j] + "<");
+                        System.out.print("|" + board2[i][j] + "<");
                     }
                     else if ((i == 2 && j== 1) || (i == 6 && j == 1) || (i == 4 && j == 0)) { //Hardcode asterisks locations
-                        System.out.print( board[i][j] + ">");
+                        System.out.print( board2[i][j] + ">");
                     }
                     else if (j == 3 || j == 6) {                    //The rest handles printing for every cell that is not an asterisk
-                        System.out.print("|" + board[i][j] + " ");
+                        System.out.print("|" + board2[i][j] + " ");
                     }
                     else if (j == 2 || j == 5) {
-                        System.out.print(board[i][j]);
+                        System.out.print(board2[i][j]);
                     } else {
-                        System.out.print(board[i][j] + " ");
+                        System.out.print(board2[i][j] + " ");
                     }
                 } else {
-                    System.out.print(board[i][j] + "|"); //Prints last row of |
+                    System.out.print(board2[i][j] + "|"); //Prints last row of |
                 }
             }
             System.out.println(); //After all columns for a row are printed go to the next line
@@ -200,15 +190,16 @@ class SudokuSolver {
 
     // Run the actual solver.
     void solveIt() {
-        solutionCounter = solve(grid, solutionCounter);
+        int board[][] = grid.clone();
+        solutionCounter = solve(board, solutionCounter);
         if (solutionCounter == 1) { //If one solution, print it
-            print(board2);
+            print();
         } else if (solutionCounter > 1){
             System.out.println(solutionCounter); //Otherwise print how many solutions
-        }
-        else
-        {
-            print(board2);
+        } else {
+            //If solutionCount = 0, then we never did any computations in our Solve() method, meaning this will return whatever grid was intialized too
+            board2 = board.clone();
+            print();
         }
     }
 
