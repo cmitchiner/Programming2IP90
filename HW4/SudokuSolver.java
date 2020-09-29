@@ -122,15 +122,15 @@ class SudokuSolver {
 
                     board[row][column] = num;                   //If no conflict, set that spot to num
 
-                    int cache = solve(board, solutionCounter);  //Keep track of previous solutions
+                    int cache = solve(board, solutionCounter);  
 
                     //Once we have found one solution, we must backtrack again but force one of our solved values to increment, then check for a solution
                     if (cache > solutionCounter) {
-                        solutionCounter = cache;
+                        solutionCounter = cache; 
                       for (int i = SUDOKU_MIN_NUMBER - 1; i < SUDOKU_SIZE; i++) {
                         for (int j = SUDOKU_MIN_NUMBER - 1; j < SUDOKU_SIZE; j++) {
                           if (board[i][j] != EMPTY) {
-                            board2[i][j] = board[i][j];
+                            board2[i][j] = board[i][j]; //If a solution is found store it in board2
                           }
                         }
                       }
@@ -140,11 +140,11 @@ class SudokuSolver {
                     }
                   }
                 }
-                return solutionCounter;
+                return solutionCounter; //If another solution was not found just return the current amount we have already found
               }
             }
           }
-          return solutionCounter + 1;
+          return solutionCounter + 1; //If another soltuion was found increment solutionCounter
       }
 
     // Print the sudoku grid.
