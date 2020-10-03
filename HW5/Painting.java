@@ -25,6 +25,7 @@ public class Painting extends JPanel implements ActionListener {
     /** do not change the following two lines **/
     final static Random random = new Random( SEED ); // random generator to be used by all classes
     int numberOfRegenerates = 0;
+    
 
    /*---- Screenshots ----
     * do not change
@@ -34,10 +35,10 @@ public class Painting extends JPanel implements ActionListener {
     
    /*---- Dinguses ----*/
     ArrayList<Dingus> shapes = new ArrayList<Dingus>(); {
-    for (int i = 0; i < 30; i++) {
-        CircleDingus circle = new CircleDingus(150, 120);
-        shapes.add();
-        }
+    // for (int i = 0; i < 30; i++) {
+    //     CircleDingus circle = new CircleDingus(150, 120);
+    //     shapes.add();
+    //     }
     }
 
     public Painting() {
@@ -49,8 +50,17 @@ public class Painting extends JPanel implements ActionListener {
     protected void paintComponent(Graphics g) { // draw all your shapes
         super.paintComponent(g);     // clears the panel
         // draw all shapes
-        RectangleDingus recDick = new RectangleDingus(120, 150);
-        recDick.draw(g);
+        int maxX = Math.abs(random.nextInt((800-450) + 450));
+        int maxY = Math.abs(random.nextInt(800-450)+450);
+        TreeDingus cDick = new TreeDingus(maxX, maxY);
+        CircleDingus circleDick = new CircleDingus(maxX,maxY);
+        shapes.add(cDick);
+        shapes.add(circleDick);
+        for (int i = 0; i < shapes.size(); i++)
+        {
+            shapes.get(i).draw(g);
+        }
+        
     }
 
     /**
@@ -70,7 +80,7 @@ public class Painting extends JPanel implements ActionListener {
         numberOfRegenerates++; // do not change
         
         // clear the shapes list
-        //shapes.clear();
+        shapes.clear();
 
         // create random shapes
         // ...
