@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - RandomArtist",
+            "request": "launch",
+            "mainClass": "RandomArtist",
+            "projectName": "Programming2IP90_bef92a73"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Penis",
+            "request": "launch",
+            "mainClass": "Penis",
+            "projectName": "Programming2IP90_bef92a73"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - solve",
+            "request": "launch",
+            "mainClass": "solve",
+            "projectName": "Programming2IP90_bef92a73"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - SudokuSolver",
             "request": "launch",
             "mainClass": "SudokuSolver",
