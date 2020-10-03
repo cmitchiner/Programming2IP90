@@ -65,7 +65,7 @@ public class Painting extends JPanel implements ActionListener {
         numberOfRegenerates++; // do not change
         
         // clear the shapes list
-        // ...
+        //shapes.clear();
 
         // create random shapes
         // ...
