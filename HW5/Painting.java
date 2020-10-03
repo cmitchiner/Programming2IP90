@@ -33,19 +33,24 @@ public class Painting extends JPanel implements ActionListener {
     String filename = "randomshot_"; // prefix
     
    /*---- Dinguses ----*/
-    ArrayList<Dingus> shapes;
-    //...
+    ArrayList<Dingus> shapes = new ArrayList<Dingus>(); {
+    for (int i = 0; i < 30; i++) {
+        CircleDingus circle = new CircleDingus(150, 120);
+        shapes.add();
+        }
+    }
 
     public Painting() {
         setPreferredSize(new Dimension(800, 450)); // make panel 800 by 450 pixels.
-        //...
+        
     }
 
     @Override
     protected void paintComponent(Graphics g) { // draw all your shapes
         super.paintComponent(g);     // clears the panel
         // draw all shapes
-        
+        RectangleDingus recDick = new RectangleDingus(120, 150);
+        recDick.draw(g);
     }
 
     /**

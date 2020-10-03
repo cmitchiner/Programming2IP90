@@ -9,6 +9,13 @@
             "name": "CodeLens (Launch) - RandomArtist",
             "request": "launch",
             "mainClass": "RandomArtist",
+            "projectName": "Programming2IP90_42d940f1"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RandomArtist",
+            "request": "launch",
+            "mainClass": "RandomArtist",
             "projectName": "Programming2IP90_bef92a73"
         },
         {
