@@ -16,7 +16,12 @@ import java.io.*;
 
 public class Painting extends JPanel implements ActionListener {
 
-   /*---- Randomness ----*/
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    /*---- Randomness ----*/
     /** you can change the variable SEED if you like
      *  the same program with the same SEED will generate exactly the same sequence of pictures
      */

@@ -33,7 +33,7 @@ abstract class Dingus {
         // initialize to a random position
         x = random.nextInt(maxX);
         y = random.nextInt(maxY);
-        //TODO: initialize to a random color
+        // initialize to a random color
         float r, g, b;
         int randomColor = random.nextInt((3) + 1);
         switch(randomColor)
