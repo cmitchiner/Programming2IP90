@@ -54,8 +54,12 @@ public class Painting extends JPanel implements ActionListener {
         int maxY = Math.abs(random.nextInt(800-450)+450);
         TreeDingus cDick = new TreeDingus(maxX, maxY);
         CircleDingus circleDick = new CircleDingus(maxX,maxY);
+        RectangleDingus rektDick = new RectangleDingus(maxX, maxY);
+        PolygonDingus polyDick = new PolygonDingus(maxX, maxY);
         shapes.add(cDick);
         shapes.add(circleDick);
+        shapes.add(rektDick);
+        shapes.add(polyDick);
         for (int i = 0; i < shapes.size(); i++)
         {
             shapes.get(i).draw(g);
