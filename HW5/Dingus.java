@@ -35,9 +35,31 @@ abstract class Dingus {
         y = random.nextInt(maxY);
         //TODO: initialize to a random color
         float r, g, b;
-        r = random.nextFloat(); //Random red color
-        g = random.nextFloat(); //Random green color
-        b = random.nextFloat(); //Random blue color
+        int randomColor = random.nextInt((3) + 1);
+        switch(randomColor)
+        {
+            case 1:
+                r = random.nextFloat(); //Random red color
+                g = random.nextFloat(); //Random green color
+                b = random.nextFloat(); //Random blue color
+                break;
+            case 2:
+                r = random.nextFloat(); //Random red color
+                g = random.nextFloat()/2f; //Random green color
+                b = random.nextFloat()/2f; //Random blue color
+                break;
+            case 3:
+                r = random.nextFloat(); //Random red color
+                g = random.nextFloat()/2f + 0.5f; //Random green color
+                b = random.nextFloat()/2f + 0.5f; //Random blue color
+                break;
+            default:
+                r = random.nextFloat(); //Random red color
+                g = random.nextFloat(); //Random green color
+                b = random.nextFloat(); //Random blue color
+                break;  
+        }
+        
         color = new Color(r, g ,b); //set color variable equal to a random RGB color
     }
 

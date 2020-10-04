@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.util.*;
 
 public class PolygonDingus extends Dingus {
     protected boolean filled; //true: filled, false: outline
@@ -13,8 +14,8 @@ public class PolygonDingus extends Dingus {
         super(maxX, maxY);
         // initialize randomly the PolygonDingus properties, i.e., radius and filledness
         for (int i = 0; i < numPoints; i++){
-            xPoint[i] = (random.nextInt(maxX/2));
-            yPoint[i] = (random.nextInt(maxY/3));
+            xPoint[i] = (random.nextInt(maxX));
+            yPoint[i] = (random.nextInt(maxY));
         }
         filled = random.nextBoolean();
     }

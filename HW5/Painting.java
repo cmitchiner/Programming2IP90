@@ -43,16 +43,16 @@ public class Painting extends JPanel implements ActionListener {
 
     public Painting() {
         setPreferredSize(new Dimension(800, 450)); // make panel 800 by 450 pixels.
-        TreeDingus cDick = new TreeDingus(maxX, maxY);
-        CircleDingus circleDick = new CircleDingus(maxX,maxY);
-        RectangleDingus rektDick = new RectangleDingus(maxX, maxY);
-        PolygonDingus polyDick = new PolygonDingus(maxX, maxY);
-        SmileDingus smileDick = new SmileDingus(maxX, maxY);
-        shapes.add(cDick);
-        shapes.add(circleDick);
-        shapes.add(rektDick);
-        shapes.add(polyDick);
-        shapes.add(smileDick);
+        // TreeDingus cDick = new TreeDingus(maxX, maxY);
+        // CircleDingus circleDick = new CircleDingus(maxX,maxY);
+        // RectangleDingus rektDick = new RectangleDingus(maxX, maxY);
+        // PolygonDingus polyDick = new PolygonDingus(maxX, maxY);
+        // SmileDingus smileDick = new SmileDingus(maxX, maxY);
+        // shapes.add(cDick);
+        // shapes.add(circleDick);
+        // shapes.add(rektDick);
+        // shapes.add(polyDick);
+        // shapes.add(smileDick);
     }
 
     @Override
@@ -86,10 +86,13 @@ public class Painting extends JPanel implements ActionListener {
         shapes.clear();
 
         // create random shapes
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 6; i++)
         {
             shapes.add(new CircleDingus(maxX, maxY));
             shapes.add(new PolygonDingus(maxX,maxY));
+            shapes.add(new TreeDingus(maxX,maxY));
+            shapes.add(new RectangleDingus(maxX,maxY));
+            shapes.add(new SmileDingus(maxX,maxY));
         }
     }
 
