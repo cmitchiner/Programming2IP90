@@ -27,7 +27,7 @@ abstract class Dingus {
      * initializes color and position to random values
      *
      * @param maxX, maxY - give maximum values for the position
-     */    
+     */   
      public Dingus(int maxX, int maxY) {
         this.maxX = maxX; this.maxY = maxY;
         // initialize to a random position
