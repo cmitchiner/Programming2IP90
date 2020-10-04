@@ -14,16 +14,16 @@ class SmileDingus extends Dingus {
         // intialize randomly the Dingus properties, i.e., position and color
         super(maxX, maxY);
         // initialize randomly the CircleDingus properties, i.e., radius and filledness
-        radius = 150;
+        radius = random.nextInt(maxX/4);
         filled = random.nextBoolean();
     }
 
     @Override
     void draw(Graphics g) {
         g.setColor(color);
-        g.drawOval(x, y, radius, radius);
-        g.fillOval(x+40, y+50, 15, 15);
-        g.fillOval(x+100, y+50, 15, 15);
-        g.drawArc(x+50, y+90, radius-100, radius-130, 180, 180);
+        g.drawArc(x, y, radius, radius,0, 360); //Outside of face
+        g.fillArc(x + (x/10), y + (y/5), radius/10, radius/10, 0, 360); //Left eye
+        g.fillArc(x + (x/5), y + (y/5), radius/10, radius/10, 0, 360); //Right eye
+        g.drawArc(x, y, radius, radius, 180, 180);
     }
 }

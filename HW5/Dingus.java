@@ -33,34 +33,41 @@ abstract class Dingus {
         // initialize to a random position
         x = random.nextInt(maxX);
         y = random.nextInt(maxY);
-        //TODO: initialize to a random color
-        float r, g, b;
-        int randomColor = random.nextInt((3) + 1);
-        switch(randomColor)
+
+        //initialize to a random color
+        float r = 0, g = 0, b = 0, a = 0;
+        int dominantRandomColorPicker = random.nextInt((3) + 1); //Sets an int to pick between our color options
+
+        switch(dominantRandomColorPicker)
         {
-            case 1:
+            case 0: //Normal RBG
                 r = random.nextFloat(); //Random red color
                 g = random.nextFloat(); //Random green color
                 b = random.nextFloat(); //Random blue color
+                a = random.nextFloat();
                 break;
-            case 2:
-                r = random.nextFloat(); //Random red color
-                g = random.nextFloat()/2f; //Random green color
-                b = random.nextFloat()/2f; //Random blue color
+            case 1: //Higher green RGB
+                r = random.nextFloat()/2f; 
+                g = random.nextFloat(); 
+                b = random.nextFloat()/2f;
+                a = random.nextFloat(); 
                 break;
-            case 3:
-                r = random.nextFloat(); //Random red color
-                g = random.nextFloat()/2f + 0.5f; //Random green color
-                b = random.nextFloat()/2f + 0.5f; //Random blue color
+            case 2: //Higher red RGB
+                r = random.nextFloat();
+                g = random.nextFloat()/2f;
+                b = random.nextFloat()/2f;
+                a = random.nextFloat();
                 break;
-            default:
-                r = random.nextFloat(); //Random red color
-                g = random.nextFloat(); //Random green color
-                b = random.nextFloat(); //Random blue color
-                break;  
+            case 3: //Higher blue RGB
+                r = random.nextFloat()/2f; 
+                g = random.nextFloat()/2f; 
+                b = random.nextFloat(); 
+                a = random.nextFloat();
+                break;
         }
         
-        color = new Color(r, g ,b); //set color variable equal to a random RGB color
+        color = new Color(r, g ,b, a); //set color variable equal to a random RGB color
+        //The last variable a, is our transperency variable
     }
 
     abstract void draw(Graphics g);

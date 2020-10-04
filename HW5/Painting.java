@@ -16,7 +16,12 @@ import java.io.*;
 
 public class Painting extends JPanel implements ActionListener {
 
-   /*---- Randomness ----*/
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    /*---- Randomness ----*/
     /** you can change the variable SEED if you like
      *  the same program with the same SEED will generate exactly the same sequence of pictures
      */
@@ -38,30 +43,19 @@ public class Painting extends JPanel implements ActionListener {
     
    /*---- Dinguses ----*/
     ArrayList<Dingus> shapes = new ArrayList<Dingus>(); {
-        //...
     }
 
     public Painting() {
         setPreferredSize(new Dimension(800, 450)); // make panel 800 by 450 pixels.
-        // TreeDingus cDick = new TreeDingus(maxX, maxY);
-        // CircleDingus circleDick = new CircleDingus(maxX,maxY);
-        // RectangleDingus rektDick = new RectangleDingus(maxX, maxY);
-        // PolygonDingus polyDick = new PolygonDingus(maxX, maxY);
-        // SmileDingus smileDick = new SmileDingus(maxX, maxY);
-        // shapes.add(cDick);
-        // shapes.add(circleDick);
-        // shapes.add(rektDick);
-        // shapes.add(polyDick);
-        // shapes.add(smileDick);
     }
 
     @Override
     protected void paintComponent(Graphics g) { // draw all your shapes
         super.paintComponent(g);     // clears the panel
         // draw all shapes
-        for (int i = 0; i < shapes.size(); i++)
+        for (Dingus d : shapes)
         {
-            shapes.get(i).draw(g);
+            d.draw(g);
         }
         
     }
@@ -86,13 +80,23 @@ public class Painting extends JPanel implements ActionListener {
         shapes.clear();
 
         // create random shapes
-        for (int i = 0; i < 6; i++)
+        int bufferSize = random.nextInt(20); //Since we have a minimum
+        for (int i = 0; i < 10 + bufferSize; i++)
         {
-            shapes.add(new CircleDingus(maxX, maxY));
-            shapes.add(new PolygonDingus(maxX,maxY));
-            shapes.add(new TreeDingus(maxX,maxY));
-            shapes.add(new RectangleDingus(maxX,maxY));
-            shapes.add(new SmileDingus(maxX,maxY));
+            int nextShapeForSwitch = random.nextInt(5);
+            switch(nextShapeForSwitch)
+            {
+                case 0: shapes.add(new PolygonDingus(maxX, maxY));
+                    break;
+                case 1: shapes.add(new StarDingus(maxX, maxY));
+                    break;
+                case 2: shapes.add(new SmileDingus(maxX, maxY));
+                    break;
+                case 3: shapes.add(new SnowflakeDingus(maxX, maxY));
+                    break;
+                case 4: shapes.add(new RectangleDingus(maxX, maxY));
+                    break;
+            }
         }
     }
 

@@ -1,5 +1,4 @@
 import java.awt.Graphics;
-import java.util.*;
 
 public class PolygonDingus extends Dingus {
     protected boolean filled; //true: filled, false: outline
