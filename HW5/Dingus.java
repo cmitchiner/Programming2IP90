@@ -34,11 +34,10 @@ abstract class Dingus {
         x = random.nextInt(maxX);
         y = random.nextInt(maxY);
 
-        //initialize to a random color
-        float r = 0, g = 0, b = 0, a = 0;
-        int dominantRandomColorPicker = random.nextInt((3) + 1); //Sets an int to pick between our color options
-
-        switch(dominantRandomColorPicker)
+        // initialize to a random color
+        float r, g, b, a;
+        int randomColor = random.nextInt((3) + 1);
+        switch(randomColor)
         {
             case 0: //Normal RBG
                 r = random.nextFloat(); //Random red color
