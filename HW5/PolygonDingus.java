@@ -1,3 +1,11 @@
+/**
+ * PolygonDingus -- part of HA RandomArtist
+ * example of a somewhat complex Dingus
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * as group number 97
+ * Date: 4th October 2020
+ */
 import java.awt.Graphics;
 
 public class PolygonDingus extends Dingus {
@@ -24,6 +32,7 @@ public class PolygonDingus extends Dingus {
         g.setColor(color);
         if (filled)
             g.fillPolygon(xPoint, yPoint, numPoints);
+            
         else
             g.drawPolygon(xPoint, yPoint, numPoints);
     }

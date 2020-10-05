@@ -1,3 +1,12 @@
+/**
+ * SnowflakeDingus -- part of HA RandomArtist
+ * example of a complicated Dingus
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * as group number 97
+ * Date: 4th October 2020
+ */
+
 import java.awt.Graphics;
 
 public class SnowflakeDingus extends Dingus {

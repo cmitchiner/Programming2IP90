@@ -1,9 +1,12 @@
 /** Main class for HA Random Artist
  * can be used unchanged in most cases
- *
- * @author kees
- * @author huub
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * and Kees (Lecturer)
+ * as group number 97
+ * Date: 4th October 2020
  */
+
 
 import java.awt.*;
 import javax.swing.*;

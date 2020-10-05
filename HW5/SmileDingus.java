@@ -1,7 +1,10 @@
 /**
- * CircleDingus -- part of HA RandomArtist
- * example of a very simple Dingus
- * @author huub
+ * SmileDingus -- part of HA RandomArtist
+ * example of a somewhat simple Dingus
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * as group number 97
+ * Date: 4th October 2020
  */
 
 import java.awt.Graphics;
@@ -21,9 +24,9 @@ class SmileDingus extends Dingus {
     @Override
     void draw(Graphics g) {
         g.setColor(color);
-        g.drawArc(x, y, radius, radius,0, 360); //Outside of face
-        g.fillArc(x + (x/10), y + (y/5), radius/10, radius/10, 0, 360); //Left eye
-        g.fillArc(x + (x/5), y + (y/5), radius/10, radius/10, 0, 360); //Right eye
-        g.drawArc(x, y, radius, radius, 180, 180);
+        g.drawOval(x, y, radius, radius);
+        g.fillOval((int) (x + radius * .3), (int) (y + radius * .3), (int) (radius * .1), (int) (radius * .1));
+        g.fillOval((int) (x + radius * .6), (int) (y + radius * .3), (int) (radius * .1), (int)(radius * .1));
+        g.drawArc((int) (x + radius * .35), (int) (y + radius * .45), radius/3, radius/3, 180, 180); //Smile
     }
 }

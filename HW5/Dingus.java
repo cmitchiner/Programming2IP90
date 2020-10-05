@@ -1,13 +1,16 @@
+/**
+ * Dingus --  part of HA Random Artist
+ * abstract class representing an arbitrary shape
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * and Kees (Lecturer)
+ * as group number 97
+ * Date: 4th October 2020
+ */
 // TO BE COMPLETED 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
-
-/**
- * Dingus --  part of HA Random Artist
- * abstract class representing an arbitrary shape
- * @author huub
- */
 abstract class Dingus {
     /** random generator to be used by all subclasses of Dingus 
      *  do not change
@@ -35,9 +38,10 @@ abstract class Dingus {
         y = random.nextInt(maxY);
 
         // initialize to a random color
-        float r, g, b, a;
+        float r = 0, g = 0, b = 0, a = 0;
         int randomColor = random.nextInt((3) + 1);
-        switch(randomColor)
+        switch(randomColor)//In order to make our pantings even more unique, we have different color dominant RGB's that
+                            //are picked at random
         {
             case 0: //Normal RBG
                 r = random.nextFloat(); //Random red color

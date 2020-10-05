@@ -1,9 +1,11 @@
 /*
  * part of HA Random artist
  * TO BE COMPLETED
- *
- * @author huub
- * @author kees
+ * Charles Mitchiner (ID 1574531)
+ * and Samir Saidi (ID 1548735)
+ * and Kees (Lecturer)
+ * as group number 97
+ * Date: 4th October 2020
  */
 
 import java.awt.*;
@@ -42,8 +44,7 @@ public class Painting extends JPanel implements ActionListener {
     String filename = "randomshot_"; // prefix
     
    /*---- Dinguses ----*/
-    ArrayList<Dingus> shapes = new ArrayList<Dingus>(); {
-    }
+    ArrayList<Dingus> shapes = new ArrayList<Dingus>(); 
 
     public Painting() {
         setPreferredSize(new Dimension(800, 450)); // make panel 800 by 450 pixels.
@@ -80,24 +81,33 @@ public class Painting extends JPanel implements ActionListener {
         shapes.clear();
 
         // create random shapes
-        int bufferSize = random.nextInt(20); //Since we have a minimum
+       // int bufferSize = random.nextInt(200); This one is used for our screenShots that say upTo210Shapes
+
+        int bufferSize = random.nextInt(20); //Buffersize is added to a constant 10 in our forloop below,
+                                            //So since buffersize is between 0 and 20, our range is from 10 shapes to 30 shapes
+                                            //By changing bufferSize, we can have thousands of shapes
         for (int i = 0; i < 10 + bufferSize; i++)
         {
-            int nextShapeForSwitch = random.nextInt(5);
+            int nextShapeForSwitch = random.nextInt(5);//Random int to pick which of the 5 shapes to pick from
             switch(nextShapeForSwitch)
             {
                 case 0: shapes.add(new PolygonDingus(maxX, maxY));
                     break;
                 case 1: shapes.add(new StarDingus(maxX, maxY));
                     break;
-                case 2: shapes.add(new SmileDingus(maxX, maxY));
+                case 2: shapes.add(new HeptagonDingus(maxX, maxY));
                     break;
                 case 3: shapes.add(new SnowflakeDingus(maxX, maxY));
                     break;
-                case 4: shapes.add(new RectangleDingus(maxX, maxY));
+                case 4: shapes.add(new SmileDingus(maxX, maxY));
                     break;
             }
         }
+        //shapes.add(new PoemDingus(maxX, maxY)); 
+        //This would add one of three poems to the painting, however we could never get the size and location
+        //To be random so we left it commented out, but if you want to see it work simply uncomment line 106
+        //Due to us not being able to change the location of the poem, it cannot be added in the switch statement or
+        //Poems would be stacked ontop of eachother and become unreadable
     }
 
     /** 
