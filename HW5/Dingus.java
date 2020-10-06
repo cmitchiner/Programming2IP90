@@ -24,7 +24,7 @@ abstract class Dingus {
     protected Color color;
 
     /** maximal coordinates; drawing area is (0,0)- (maxX,maxY) **/
-    int maxX, maxY;
+    protected int maxX, maxY;
 
     /**
      * initializes color and position to random values

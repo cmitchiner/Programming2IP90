@@ -24,9 +24,9 @@ class SmileDingus extends Dingus {
     @Override
     void draw(Graphics g) {
         g.setColor(color);
-        g.drawOval(x, y, radius, radius);
-        g.fillOval((int) (x + radius * .3), (int) (y + radius * .3), (int) (radius * .1), (int) (radius * .1));
-        g.fillOval((int) (x + radius * .6), (int) (y + radius * .3), (int) (radius * .1), (int)(radius * .1));
-        g.drawArc((int) (x + radius * .35), (int) (y + radius * .45), radius/3, radius/3, 180, 180); //Smile
+        g.drawOval(x, y, radius, radius); //This is the outside of the circle, prints at x, y with a determined radius
+        g.fillOval((int) (x + radius * .3), (int) (y + radius * .3), (int) (radius * .1), (int) (radius * .1)); //Left  eye
+        g.fillOval((int) (x + radius * .6), (int) (y + radius * .3), (int) (radius * .1), (int)(radius * .1)); //Right eye, same as left but higher x coord
+        g.drawArc((int) (x + radius * .35), (int) (y + radius * .45), radius/3, radius/3, 180, 180); //Smile, arc must be 180 a half circle
     }
 }

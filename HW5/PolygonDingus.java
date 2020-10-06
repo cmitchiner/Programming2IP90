@@ -11,9 +11,9 @@ import java.awt.Graphics;
 public class PolygonDingus extends Dingus {
     protected boolean filled; //true: filled, false: outline
     
-    int numPoints = Math.abs(random.nextInt(15));
-    int[] xPoint = new int[numPoints];
-    int[] yPoint = new int[numPoints];
+    protected int numPoints = Math.abs(random.nextInt(15));
+    protected int[] xPoint = new int[numPoints];
+    protected int[] yPoint = new int[numPoints];
 
 
     public PolygonDingus(int maxX, int maxY) {

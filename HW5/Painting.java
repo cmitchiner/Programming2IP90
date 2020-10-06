@@ -95,7 +95,7 @@ public class Painting extends JPanel implements ActionListener {
                     break;
                 case 1: shapes.add(new StarDingus(maxX, maxY));
                     break;
-                case 2: shapes.add(new HeptagonDingus(maxX, maxY));
+                case 2: shapes.add(new CoolTreeDingus(maxX, maxY));
                     break;
                 case 3: shapes.add(new SnowflakeDingus(maxX, maxY));
                     break;
@@ -103,11 +103,6 @@ public class Painting extends JPanel implements ActionListener {
                     break;
             }
         }
-        //shapes.add(new PoemDingus(maxX, maxY)); 
-        //This would add one of three poems to the painting, however we could never get the size and location
-        //To be random so we left it commented out, but if you want to see it work simply uncomment line 106
-        //Due to us not being able to change the location of the poem, it cannot be added in the switch statement or
-        //Poems would be stacked ontop of eachother and become unreadable
     }
 
     /** 

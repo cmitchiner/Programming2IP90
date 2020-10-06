@@ -19,7 +19,7 @@ class StarDingus extends Dingus {
     public StarDingus(int maxX, int maxY) {
         // intialize randomly the Dingus properties, i.e., position and color
         super(maxX, maxY);
-        // initialize randomly the CircleDingus properties, i.e., radius and filledness
+        // initialize randomly the StarDingus properties, i.e., radius and filledness
         middleX = random.nextInt(maxX);
         middleY = random.nextInt(maxY);
         h = random.nextInt(maxY/4);
@@ -28,8 +28,6 @@ class StarDingus extends Dingus {
         filled = random.nextBoolean();
     }
     public void createCoordinates() {
-        //Uses a very similar technique to the heptagonDingus, we can make a star from triangles and circles
-        
         xPoints[0] = (int) (middleX - 0.5*h*Math.tan(Math.toRadians(36)));
         yPoints[0] = (int) (middleY - 0.5*h);
         
