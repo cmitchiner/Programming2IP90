@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - PrisonersDilemma",
+            "request": "launch",
+            "mainClass": "PrisonersDilemma",
+            "projectName": "Programming2IP90_bef92a73"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - RandomArtist",
             "request": "launch",
             "mainClass": "RandomArtist",

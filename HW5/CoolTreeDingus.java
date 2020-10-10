@@ -14,7 +14,7 @@ public class CoolTreeDingus extends Dingus {
     final int LEVEL = 5;
     int x1, y1;  
 
-    public CoolTreeDingus(int maxX, int maxY){
+    public CoolTreeDingus(int maxX, int maxY) {
         super(maxX, maxY);
         x1 = random.nextInt(maxX);
         y1 = random.nextInt(80); //Since these get so big it cant be higher than 80 or else it will be off the screen
@@ -27,7 +27,7 @@ public class CoolTreeDingus extends Dingus {
     // into two separate trees, which draws "trunks" (branches) from the base of the previous "tree"
     // to a new endpoint, repeating 5 times until the base case is reached and no further branching happens.
     private void drawTree(Graphics g, int x1, int y1, double rotationAngle, int length) {
-        if (length == 0){
+        if (length == 0) {
             return;
         } 
         int x2 = x1 + (int) (Math.cos(Math.toRadians(rotationAngle)) * length * 10.0);

@@ -20,7 +20,7 @@ public class PolygonDingus extends Dingus {
         // intialize randomly the Dingus properties, i.e., position and color
         super(maxX, maxY);
         // initialize randomly the PolygonDingus properties, i.e., radius and filledness
-        for (int i = 0; i < numPoints; i++){
+        for (int i = 0; i < numPoints; i++) {
             xPoint[i] = (random.nextInt(maxX));
             yPoint[i] = (random.nextInt(maxY));
         }
@@ -31,9 +31,10 @@ public class PolygonDingus extends Dingus {
     void draw(Graphics g) {
         g.setColor(color);
         if (filled)
+        {
             g.fillPolygon(xPoint, yPoint, numPoints);
-            
-        else
+        } else {
             g.drawPolygon(xPoint, yPoint, numPoints);
+        }
     }
 }

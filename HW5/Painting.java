@@ -54,8 +54,7 @@ public class Painting extends JPanel implements ActionListener {
     protected void paintComponent(Graphics g) { // draw all your shapes
         super.paintComponent(g);     // clears the panel
         // draw all shapes
-        for (Dingus d : shapes)
-        {
+        for (Dingus d : shapes) {
             d.draw(g);
         }
         
@@ -81,28 +80,27 @@ public class Painting extends JPanel implements ActionListener {
         shapes.clear();
 
         // create random shapes
-       // int bufferSize = random.nextInt(200); This one is used for our screenShots that say upTo210Shapes
+       // int bufferSize = random.nextInt(200); This could be used to make a picture with much more shapes
 
         int bufferSize = random.nextInt(20); //Buffersize is added to a constant 10 in our forloop below,
                                             //So since buffersize is between 0 and 20, our range is from 10 shapes to 30 shapes
                                             //By changing bufferSize, we can have thousands of shapes
-        for (int i = 0; i < 10 + bufferSize; i++)
-        {
+        for (int i = 0; i < 10 + bufferSize; i++) {
             int nextShapeForSwitch = random.nextInt(5);//Random int to pick which of the 5 shapes to pick from
-            switch(nextShapeForSwitch)
-            {
-                case 0: shapes.add(new PolygonDingus(maxX, maxY));
+            switch(nextShapeForSwitch) {
+                case 0: //shapes.add(new PolygonDingus(maxX, maxY));
                     break;
-                case 1: shapes.add(new StarDingus(maxX, maxY));
+                case 1: //shapes.add(new StarDingus(maxX, maxY));
                     break;
-                case 2: shapes.add(new CoolTreeDingus(maxX, maxY));
+                case 2: //shapes.add(new CoolTreeDingus(maxX, maxY));
                     break;
-                case 3: shapes.add(new SnowflakeDingus(maxX, maxY));
+                case 3: //shapes.add(new SnowflakeDingus(maxX, maxY));
                     break;
-                case 4: shapes.add(new SmileDingus(maxX, maxY));
+                case 4: //shapes.add(new SmileDingus(maxX, maxY));
                     break;
             }
         }
+        shapes.add(new StarDingus(maxX, maxY));
     }
 
     /** 

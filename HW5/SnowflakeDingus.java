@@ -14,7 +14,7 @@ public class SnowflakeDingus extends Dingus {
     final int LEVEL = 5;
     protected int x1, x5, y1, y5;  
 
-    public SnowflakeDingus(int maxX, int maxY){
+    public SnowflakeDingus(int maxX, int maxY) {
         super(maxX, maxY);
         length = random.nextInt(maxY);
         length = length - length/4;
@@ -31,12 +31,11 @@ public class SnowflakeDingus extends Dingus {
     draw lines from various points over (x1, y1) to (x5, y5). This creates one Koch curve.*/
     private void snowflakeHelper(Graphics g, int LEVEL, int x1, int y1, int x5, int y5) {
         int difX, difY, x2, y2, x3, y3, x4, y4;
-        if (LEVEL == 0){
+        if (LEVEL == 0) {
  
             g.drawLine(x1, y1, x5, y5); // Exit condition for this method; draws a line from (x1, y1) to (x5, y5).
                                         // In practice, this will just draw an equilateral triangle if it isn't iterated.
-        }
-        else{
+        } else {
               difX = x5 - x1;           // defining the difference/change between x5 and x1, and y5 and y1.
               difY = y5 - y1;
 

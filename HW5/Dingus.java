@@ -40,9 +40,8 @@ abstract class Dingus {
         // initialize to a random color
         float r = 0, g = 0, b = 0, a = 0;
         int randomColor = random.nextInt((3) + 1);
-        switch(randomColor)//In order to make our pantings even more unique, we have different color dominant RGB's that
+        switch(randomColor) {//In order to make our pantings even more unique, we have different color dominant RGB's that
                             //are picked at random
-        {
             case 0: //Normal RBG
                 r = random.nextFloat(); //Random red color
                 g = random.nextFloat(); //Random green color
@@ -68,7 +67,6 @@ abstract class Dingus {
                 a = random.nextFloat();
                 break;
         }
-        
         color = new Color(r, g ,b, a); //set color variable equal to a random RGB color
         //The last variable a, is our transperency variable
     }
