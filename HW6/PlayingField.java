@@ -53,6 +53,7 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener {
     private Timer t; // Timer for our intervals
 
     private JLabel[][] gridLayout;
+    private ActionListener actionBoy;
     
     // random number genrator
     private static final long SEED = 37L; // seed for random number generator; any number goes
@@ -67,7 +68,7 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener {
         sliderPanel = new JPanel(new GridLayout(1, 2));
         labelPanel = new JPanel(new GridLayout(1, 2));
         buttonPanel = new JPanel(new GridLayout(1, 2));
-        
+        initalizeTimer(1000);
         for (int i = 0; i < grid.length; i++){
             for (int j = 0; j < grid.length; j++) {
                 grid[i][j] = new Patch(); // fill up the grid array with new Patches, randomized strategies
@@ -75,11 +76,28 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener {
         }
     }
 
+    void initalizeTimer(int time)
+    {
+        actionBoy = new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                step(); // starts a new step
+                graphPanel.removeAll(); // removes the current graph
+                buildCells();           // rebuilds it based off the new changes
+                graphPanel.revalidate();
+                if (goPauseButton.getText().equals("GO")) {
+                    t.stop(); // stops the loop once you hit pause
+                }
+            }
+        };
+        t = new Timer(time,actionBoy);
+    }
+
     /**
      * calculate and execute one step in the simulation
      */
     public void step() {
                 double score = 0;
+                t.start();
                 for (int i = 0; i < 50; i++) {
                     for (int j = 0; j < 50; j++) {
                         grid[i][j].clearNeighbors(); //Make sure this patch's neighbor list is clear before adding
@@ -212,7 +230,7 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener {
     
     public void buildCells() { 
         graphPanel.setPreferredSize(new Dimension(500,500));
-        //graphPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        graphPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         gridLayout = new JLabel[50][50];
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 50; j++) {
@@ -303,43 +321,38 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener {
         add(buttonPanel,gbc);
     }
 
+         
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if ( "GO".equals(e.getActionCommand()) ) { // when go is pressed
             buttonSource = goPauseButton;
-            buttonSource.setText("PAUSE");         // turns the button to a pause button
-            int frequencyValueInMilliSeconds = frequency.getValue(); // gets value of current frequency
-            frequencyValueInMilliSeconds *= 1000; // converts it to milliseconds to work with Timer
-
-            t = new Timer(frequencyValueInMilliSeconds, new ActionListener(){
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    step(); // starts a new step
-                    graphPanel.removeAll(); // removes the current graph
-                    buildCells();           // rebuilds it based off the new changes
-                    graphPanel.revalidate();
-                    if (goPauseButton.getText().equals("GO")) {
-                        t.stop(); // stops the loop once you hit pause
-                    }
-                    
-                }
-            });         
-            t.start(); // starts the loop
+            buttonSource.setText("PAUSE");
+            t.stop();
+            initalizeTimer(1000*frequency.getValue());
+            t.start();
+            
+            
         } else if ("PAUSE".equals(e.getActionCommand())) {
+            t.stop();
             buttonSource = (JButton) e.getSource();
             buttonSource.setText("GO"); // turns the button to a go button
             //Start stepping
         } else if ("Reset".equals(e.getActionCommand())) {
-                graphPanel.removeAll(); // removes the graph, labels, slider and buttons
-                labelPanel.removeAll();
-                sliderPanel.removeAll();
-                buttonPanel.removeAll();
-                resetGrid();           // resets the grid then rebuilds it
-                buildCells();
-                buildSlider();
-                buildLabels();
-                buildButtons();
-                revalidate();
+            if (t.isRunning())
+            {
+                t.stop();
+            }
+            graphPanel.removeAll(); // removes the graph, labels, slider and buttons
+            labelPanel.removeAll();
+            sliderPanel.removeAll();
+            buttonPanel.removeAll();
+            resetGrid();           // resets the grid then rebuilds it
+            buildCells();
+            buildSlider();
+            buildLabels();
+            buildButtons();
+            revalidate();
         }
     }
 
@@ -353,13 +366,10 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener {
             defectionLabel.setText("Defection: " + value);
         } else {
             double value = sliderSource.getValue();
-            String valueToString;
-            if (value < 10) {
-                valueToString = "0" + value;
-            } else {
-                valueToString = "" + value;
-                frequencyLabel.setText("Frequency: " + valueToString + " seconds");
-            }
+            if (value < 10)
+            frequencyLabel.setText("Frequency: 0" + value + " seconds");
+            else
+            frequencyLabel.setText("Frequency: " + value + " seconds");
         }
     }
 }
