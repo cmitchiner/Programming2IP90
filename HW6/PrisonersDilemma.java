@@ -28,7 +28,7 @@ class PrisonersDilemma {
 
             playingField = new PlayingField();
 
-            frame = new JFrame("Prisoner’s Dilemma Game"); // Title of Window
+            frame = new JFrame("Prisoner’s Dilemma Game Simulation"); // Title of Window
 
             frame.add(playingField); // Add it to the panel
 
@@ -36,7 +36,7 @@ class PrisonersDilemma {
 
             playingField.buildSlider(); // Setup the Slider
 
-            playingField.buildLabels();
+            playingField.buildLabels(); //Setup  Slider Labels
 
             playingField.buildButtons(); // Setup Buttons
 
@@ -48,7 +48,7 @@ class PrisonersDilemma {
         });
     }
 
-    public static void main( String[] a ) {
+    public static void main(String[] args) {
         (new PrisonersDilemma()).buildGUI();
     }
 }
