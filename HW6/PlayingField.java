@@ -33,38 +33,28 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
      *
      */
     private static final long serialVersionUID = -3799783618101669910L; //Added by VSCode to prevent warning
-
     private static final int GRID_SIZE = 50;
     private static final int GRID_MIN = 0;
-    private static final int GRID_MAX = 49;
     private static final int defectionMin = 0;
     private static final int defectionMax = 300;
-    private static final int defectionInit = 150;
+    private static final int defectionInit = 100;
     private static final int frequencyMin = 0;
     private static final int frequencyMax = 60;
     private static final int frequencyInit = 1;
+    private static final int defectionTickSpacing = 100;
+    private static final int frequencyTickSpacing = 10;
 
     private GridBagConstraints gbc; //Panel Manager
-
     private Patch[][] grid = new Patch[GRID_SIZE][GRID_SIZE]; // creates a grid of Patches based off the Grid Size assigned
-
-
-    private double alpha = 1.5; // default value for the defection award factor (DAF)
-
     private JButton resetButton, goPauseButton, buttonSource, alternativeUpdate; // buttons for Go/Pause, Reset and the button source
-
     private JSlider defectionAwardFactor, frequency; // sliders to change DAF and frequency between board updates
-
     private JLabel frequencyLabel, defectionLabel; // labels to insert in our application for both slide
-    
     private JPanel graphPanel, sliderPanel, labelPanel, buttonPanel; // adding panels for each component
-
-    private Timer t; // Timer for our intervals
-
     private JLabel[][] gridLayout; //Our grid of JPanels to match the grid of patches
 
     private ActionListener stepTimerListener; 
-
+    private double alpha; // default value for the defection award factor (DAF)
+    private Timer t; // Timer for our intervals
     private boolean whichUpdateRule = false; //False is default rule, true is alternative rule
     
     // random number genrator
@@ -81,6 +71,11 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
         labelPanel = new JPanel(new GridLayout(1, 2));
         buttonPanel = new JPanel(new GridLayout(1, 2));
         initalizeTimer(1000);                           //Intalize timer
+        alpha = (double) (defectionInit/100.0);
+        initalizeGrid();
+        
+    }
+    void initalizeGrid() {
         for (int i = 0; i < grid.length; i++){
             for (int j = 0; j < grid.length; j++) {
                 grid[i][j] = new Patch(); // fill up the grid array with new Patches, randomized strategies
@@ -109,31 +104,25 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
      */
     public void step() {
                 double score = 0; //Variable to hold calculated score
-                for (int i = 0; i < 50; i++) {
-                    for (int j = 0; j < 50; j++) {
+                for (int i = GRID_MIN; i < GRID_SIZE; i++) {
+                    for (int j = GRID_MIN; j < GRID_SIZE; j++) {
                         grid[i][j].clearNeighbors(); //Make sure this patch's neighbor list is clear before adding
                         checkNeighbors(i, j);       //Fill this patch[i][j] neighbor list
                         score = 0;                  //Reset score for looping purposes
-                        if (grid[i][j].isCooperating()) {
-                            for (int c = 0; c < grid[i][j].getNeighborsArraySize(); c++) {
-                                if (grid[i][j].getNeighbor(c).isCooperating()) { //The score of a cooperating patch is amount of neighbors who also cooperate
-                                    score++;
-                                }
+                        for (int c = 0; c < grid[i][j].getNeighborsArraySize(); c++) {
+                            if (grid[i][j].getNeighbor(c).isCooperating()) { //Calculates the amount of cooperating neighbors
+                                score++;
                             }
-                        } else { //Defecting
-                            for (int c = 0; c < grid[i][j].getNeighborsArraySize(); c++) {
-                                if (grid[i][j].getNeighbor(c).isCooperating()) { //Calculate cooperating neighbors
-                                    score++;
-                                }
-                            }
-                            score = score * getAlpha(); //All cooperating neighbors times defection award factor
                         }
-                        grid[i][j].setScore(score); //Set this patch's score
+                        if (!grid[i][j].isCooperating()) { //Score for defecting is how many neighbors are cooperating times alpha
+                            score = score * getAlpha();
+                        }
+                        grid[i][j].setScore(score);
                     }
                 }
                 //After we reach this line, the scores for every single patch have been computed
-                for (int i = 0; i < grid.length; i++) {
-                    for (int j = 0; j < grid.length; j++) {
+                for (int i = GRID_MIN; i < grid.length; i++) {
+                    for (int j = GRID_MIN; j < grid.length; j++) {
                         if (!whichUpdateRule) {
                             grid[i][j].setPreviousStrategy(grid[i][j].isCooperating());
                             grid[i][j].chooseStrategyBasedOnNeighbors(); //Now change strategy based on neighbors
@@ -145,135 +134,25 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
                 }
             }
 
-    void checkNeighbors(int i, int j) { // adds neighbors while checking for any issues (in edge cases where a patch only has 3 or 5 neighbors)
-        try {
-            Patch topLeft = grid[i-1][j-1];
-            grid[i][j].addNeighbor(topLeft);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MIN && j == GRID_MIN) { //Top left corner 
-                Patch topLeft = grid[GRID_MAX][GRID_MAX]; //Calculate the topLeft neighbor for the topLeft corner
-                grid[i][j].addNeighbor(topLeft);
-            } else if (i == GRID_MAX && j == GRID_MIN) { //bottom left corner
-                Patch topLeft = grid[GRID_MAX-1][GRID_MAX];
-                grid[i][j].addNeighbor(topLeft); //Calculate the topLeft neighbor for the bottomLeft corner
-            } else if (i == GRID_MIN && j == GRID_MAX) { //Top right corner
-                Patch topLeft = grid[GRID_MAX][GRID_MAX-1]; //Calculate the topLeft neighbor for the topRight corner
-                grid[i][j].addNeighbor(topLeft);
-            } else if (j == GRID_MIN) { //Left edge
-                for (int iterate = i-1; iterate < 3+(i-1); iterate++) {
-                    Patch topLeft = grid[iterate][GRID_MAX]; //Calculates all neighbors for a patch on the left edge
-                    grid[i][j].addNeighbor(topLeft);
-                }
-            } else if (i == GRID_MIN) { //Top edge
-                for (int iterate = j-1; iterate < 3+(j-1); iterate++) { //Calculates all neighbors for a patch on the top edge
-                    Patch topLeft = grid[GRID_MAX][iterate];
-                    grid[i][j].addNeighbor(topLeft);
-                }
-            }
-        }
-        try {
-            Patch topMiddle = grid[i-1][j];
-            grid[i][j].addNeighbor(topMiddle);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MIN && j == GRID_MIN) { //Top left corner
-                Patch topMiddle = grid[GRID_MAX][GRID_MIN]; //Calculates the topMiddle neighbor for the top left corner
-                grid[i][j].addNeighbor(topMiddle);
-            } else if (i == GRID_MIN && j == GRID_MAX) {//Top right corner
-                Patch topMiddle = grid[GRID_MAX][GRID_MAX]; //Calculates the topMiddle neighbor for the top right corner
-                grid[i][j].addNeighbor(topMiddle);
-            }
-        }
-        try {
-            Patch topRight = grid[i-1][j+1];
-            grid[i][j].addNeighbor(topRight);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MIN && j == GRID_MIN) {//Top left corner
-                Patch topRight = grid[GRID_MAX][GRID_MIN+1]; //Calculates the topRight neighbor for the top left corner
-                grid[i][j].addNeighbor(topRight);
-            } else if (i == GRID_MAX && j == GRID_MAX) {//bottom right corner
-                Patch topRight = grid[GRID_MAX-1][GRID_MIN]; //Calcuates the topRight neighbor for the bottom right corner
-                grid[i][j].addNeighbor(topRight);
-            } else if (i == GRID_MIN && j == GRID_MAX) { //Top right corner
-                Patch topRight = grid[GRID_MAX][GRID_MIN]; //Calcuates the topRight neighbor for the top right corner
-                grid[i][j].addNeighbor(topRight);
-            }
-        }
-        try {
-            Patch middleLeft = grid[i][j-1];
-            grid[i][j].addNeighbor(middleLeft);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MIN && j == GRID_MIN) { //Top left corner
-                Patch middleLeft = grid[GRID_MIN][GRID_MAX]; //Calcuates the middleLeft neighbor for the top left  corner
-                grid[i][j].addNeighbor(middleLeft);
-            } else if (i == GRID_MAX && j == GRID_MIN) {//bottom left corner
-                Patch middleLeft = grid[GRID_MAX][GRID_MAX]; //Calcuates the middleLeft neighbor for the bottom left corner
-                grid[i][j].addNeighbor(middleLeft);
-            }
-        }
-        try {
-            Patch middleRight = grid[i][j+1];
-            grid[i][j].addNeighbor(middleRight);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MIN && j == GRID_MAX) { //Top right corner
-                Patch middleRight = grid[GRID_MIN][GRID_MIN];   //Calcuates the middleRight neighbor for the top right  corner
-                grid[i][j].addNeighbor(middleRight);
-            } else if (i == GRID_MAX && j == GRID_MAX) {//bottom right corner
-                Patch middleRight = grid[GRID_MAX][GRID_MIN]; //Calcuates the middleRight neighbor for the bottom right corner
-                grid[i][j].addNeighbor(middleRight);
-            }
-        }
-        try {
-            Patch bottomLeft = grid[i+1][j-1];
-            grid[i][j].addNeighbor(bottomLeft);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MIN && j == GRID_MIN) {//Top left corner
-                Patch bottomLeft = grid[GRID_MIN+1][GRID_MAX]; //Calcuates the bottomLeft neighbor for the top left corner
-                grid[i][j].addNeighbor(bottomLeft);
-            } else if (i == GRID_MAX && j == GRID_MAX){ //bottom right corner
-                Patch bottomLeft = grid[GRID_MIN][GRID_MAX-1]; //Calcuates the bottomLeft neighbor for the bottom right  corner
-                grid[i][j].addNeighbor(bottomLeft);
-            } else if (i == GRID_MAX && j == GRID_MIN){ //bottem left corner
-                Patch bottomLeft = grid[GRID_MIN][GRID_MAX];//Calcuates the bottomLeft neighbor for the bottom left corner
-                grid[i][j].addNeighbor(bottomLeft);
-            }
-        }
-        try {
-            Patch bottomMiddle = grid[i+1][j];
-            grid[i][j].addNeighbor(bottomMiddle);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MAX && j == GRID_MAX){ //bottom right corner
-                Patch bottomMiddle = grid[GRID_MIN][GRID_MAX]; //Calcuates the bottoMiddle neighbor for the bottom right corner
-                grid[i][j].addNeighbor(bottomMiddle);
-            } else if (i == GRID_MAX && j == GRID_MIN) { //bottem left corner
-                Patch bottomMiddle = grid[GRID_MIN][GRID_MIN]; //Calcuates the bottoMiddle neighbor for the bottom left corner
-                grid[i][j].addNeighbor(bottomMiddle);
-            }
-        }
-        try {
-            Patch bottomRight = grid[i+1][j+1];
-            grid[i][j].addNeighbor(bottomRight);
-        } catch (IndexOutOfBoundsException e) {
-            if (i == GRID_MIN && j == GRID_MAX){ //Top right corner
-                Patch bottomRight = grid[GRID_MIN+1][GRID_MIN]; //Calcuates the bottomRight neighbor for the top right corner
-                grid[i][j].addNeighbor(bottomRight);
-            } else if (i == GRID_MAX && j == GRID_MAX) { //bottom right corner
-                Patch bottomRight = grid[GRID_MIN][GRID_MIN]; //Calcuates the bottomRight neighbor for the bottom right corner
-                grid[i][j].addNeighbor(bottomRight);
-            } else if (i == GRID_MAX && j == GRID_MIN){ //bottem left corner
-                Patch bottomRight = grid[GRID_MIN][GRID_MIN+1]; //Calcuates the bottomRight neighbor for the bottom left corner
-                grid[i][j].addNeighbor(bottomRight);
-            } else if (j == GRID_MAX){ //Right edge
-                for (int iterate = i-1; iterate < 3+(i-1); iterate++) {
-                    Patch topLeft = grid[iterate][GRID_MIN]; //Calculates all neighbors for a patch on the right edge
-                    grid[i][j].addNeighbor(topLeft);
-                }
-            } else if (i == GRID_MAX){ //Bottom edge
-                for (int iterate = j-1; iterate < 3+(j-1); iterate++) {
-                    Patch topLeft = grid[GRID_MIN][iterate]; //Calculates all neighbors for a patch on the bottom edge
-                    grid[i][j].addNeighbor(topLeft);
-                }
-            }
-        }
+    void checkNeighbors(int row, int col) {
+        Patch currentPatch = grid[row][col]; //Store the current patch
+
+        //These methods use the modular operator and the grid size in order to determine 8 neighbors for every patch
+        int rowPoint = (row+1)%GRID_SIZE;
+        int rowModular = (row-1+GRID_SIZE)%GRID_SIZE;
+        int colPoint = (col+1)%GRID_SIZE;
+        int colModular = (col-1+GRID_SIZE)%GRID_SIZE;
+
+        //Using are above point calculations, we can now determine all 8 neighbors
+        // and add it to currentPatch's list of neighbors
+        currentPatch.addNeighbor(grid[rowPoint][col]);
+        currentPatch.addNeighbor(grid[rowPoint][colPoint]);
+        currentPatch.addNeighbor(grid[rowPoint][colModular]);
+        currentPatch.addNeighbor(grid[row][colPoint]);
+        currentPatch.addNeighbor(grid[row][colModular]);
+        currentPatch.addNeighbor(grid[rowModular][col]);
+        currentPatch.addNeighbor(grid[rowModular][colPoint]);
+        currentPatch.addNeighbor(grid[rowModular][colModular]);
     }
 
     public void setAlpha(double alpha) { // Alpha mutator
@@ -303,12 +182,15 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
     // a patch should become cooperating if the corresponding
     // item in inGrid is true
     public void setGrid(boolean[][] inGrid) {
-        inGrid = getGrid(); // creates a new boolean array based off the current grid of patches' strategy 
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; i < 50; j++) {
-                if (inGrid[i][j] == true) {
-                    grid[i][j].setCooperating(true); // if that patch is cooperating in inGrid, set its corresponding patch
-                                                     // in the regular grid to also cooperate
+        if (inGrid.length <= grid.length) //Make sure we arnt accessing grid out of bounds
+        {
+            for (int i = GRID_MIN; i < inGrid.length; i++) {
+                for (int j = GRID_MIN; j < inGrid.length; j++) {
+                    if (inGrid[i][j]) {
+                        grid[i][j].setCooperating(true); // if that patch is cooperating in inGrid, set its corresponding patch true
+                    } else {
+                        grid[i][j].setCooperating(false); //if patch is defecting in Ingrid, set its corresponding patch false
+                    }
                 }
             }
         }
@@ -316,8 +198,8 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
 
     public void resetGrid() {
         Patch[][] gridReset = new Patch[GRID_SIZE][GRID_SIZE];
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
+        for (int i = GRID_MIN; i < GRID_SIZE; i++) {
+            for (int j = GRID_MIN; j < GRID_SIZE; j++) {
                 gridReset[i][j] = new Patch(); // makes a new randomized grid
             }
         }
@@ -328,9 +210,9 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
     public void buildCells() { 
         graphPanel.setPreferredSize(new Dimension(500,500));
         graphPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        gridLayout = new JLabel[50][50];
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
+        gridLayout = new JLabel[GRID_SIZE][GRID_SIZE];
+        for (int i = GRID_MIN; i < GRID_SIZE; i++) {
+            for (int j = GRID_MIN; j < GRID_SIZE; j++) {
                 gridLayout[i][j] = new JLabel();
                 gridLayout[i][j].addMouseListener(this); //Add a mouse listener to every single patch
                 gridLayout[i][j].setOpaque(true);
@@ -344,9 +226,9 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
                 }
                 else if (grid[i][j].isCooperating() != grid[i][j].getPreviousStrategy()) {
                     if (grid[i][j].isCooperating()) {
-                        gridLayout[i][j].setBackground(Color.cyan); //Cyan for just changed to cooperating
+                        gridLayout[i][j].setBackground(Color.cyan); //Light blue for just changed to cooperating
                     } else {
-                        gridLayout[i][j].setBackground(Color.magenta); //Magenta for just changed to defecting
+                        gridLayout[i][j].setBackground(new Color(255,102,0)); //Orange for just changed to defecting
                     }
                 }
                 gridLayout[i][j].setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)); //Outline of boxes
@@ -364,7 +246,7 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
         frequencyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         double valueA = defectionAwardFactor.getValue();
-        valueA /= 100;
+        valueA /= 100.0;
         defectionLabel = new JLabel("Defection: " + valueA);
         defectionLabel.setHorizontalAlignment(JLabel.LEFT); //Set alignment
         defectionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -397,13 +279,13 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
         labelTableFrequency.put(60, new JLabel("60"));
 
         //Setup Tick spacing and labels for both sliders
-        defectionAwardFactor.setMajorTickSpacing(100); 
+        defectionAwardFactor.setMajorTickSpacing(defectionTickSpacing); 
         defectionAwardFactor.setPaintTicks(true);
         defectionAwardFactor.setPaintLabels(true);
         defectionAwardFactor.setLabelTable(labelTableDefection);
         defectionAwardFactor.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        frequency.setMajorTickSpacing(10);
+        frequency.setMajorTickSpacing(frequencyTickSpacing);
         frequency.setPaintTicks(true);
         frequency.setPaintLabels(true);
         frequency.setLabelTable(labelTableFrequency);
@@ -464,7 +346,7 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
             buildSlider();
             buildLabels();
             buildButtons();
-            setAlpha(1.5); //Reset local alpha variable
+            setAlpha((double)(defectionInit/100.0)); //Reset local alpha variable
             graphPanel.revalidate();
             labelPanel.revalidate();
             sliderPanel.revalidate();
@@ -485,7 +367,7 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
         JSlider sliderSource = (JSlider) e.getSource();
         if (sliderSource == defectionAwardFactor) { //stateChanged for defection
             double value = sliderSource.getValue();
-            value = value/100;
+            value = value/100.0;
             setAlpha(value);
             defectionLabel.setText("Defection: " + value);
         } else {                                   //stateChanged for frequency
@@ -501,8 +383,8 @@ class PlayingField extends JPanel implements ActionListener, ChangeListener, Mou
     @Override
     public void mousePressed(MouseEvent e) {
         JLabel label = (JLabel)e.getSource();
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
+        for (int i = GRID_MIN; i < GRID_SIZE; i++) {
+            for (int j = GRID_MIN; j < GRID_SIZE; j++) {
                 if (gridLayout[i][j] == label){ //Loop through the grid of Jpanels, if one of the clicked panels is on the grid
                     grid[i][j].toggleStrategy(); //Change its strategy
                     if (grid[i][j].isCooperating()) {//Change its color

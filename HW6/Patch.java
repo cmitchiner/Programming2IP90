@@ -30,9 +30,8 @@ class Patch {
     boolean isCooperating() {
         if (strategy) {
             return true;
-        } else {
-            return false;
-        }
+        } 
+        return false;
     }
     
     // set strategy to C if isC is true and to D if false
@@ -81,8 +80,7 @@ class Patch {
       return neighbors.size();  
     }
     //This will be used in the step method, to set the previous strategy before calling the chooseStrategy method
-    void setPreviousStrategy(boolean passedStrategy)
-    {
+    void setPreviousStrategy(boolean passedStrategy) {
         previousStrategy = passedStrategy;
     }
     //This will be used in the buildCells method to check if the past strategy equals the next
@@ -90,45 +88,11 @@ class Patch {
         return previousStrategy;
     }
 
-    void chooseStrategyBasedOnNeighborsAlternative()
-    {
+    void chooseStrategyBasedOnNeighborsAlternative() {
         Double maximum = score;
         Patch maximumPatch = null;
+        boolean foundAnother = false;
         ArrayList<Patch> list = new ArrayList<Patch>();
-        previousStrategy = isCooperating();
-
-        //Find the maximum score, if this patch has the highest then maximumPatch will be null
-        for (int i = 0; i < neighbors.size(); i++) {
-            if (neighbors.get(i).getScore() >= maximum){
-                maximum = neighbors.get(i).getScore();
-                maximumPatch = neighbors.get(i);
-            }
-        }
-        
-        for (int i = 0; i < neighbors.size(); i++) {
-            if (maximum == score && maximumPatch != null) { //If this if statement gets hit, it means this patches score is a max and one of its neighbors has the same max
-                setCooperating(isCooperating());            //Using the alternative rule we should just use this patches score, so we set it and return
-                return;
-            } else if (maximum != score && neighbors.get(i).getScore() == maximum && neighbors.get(i) != maximumPatch) { //Check all the neighbors besides the maximumPatch to see if they are also equal
-                list.add(neighbors.get(i));
-            }
-        }
-
-        if (list.isEmpty() && maximumPatch != null) { //If the list is empty and maximumPatch isnt null then we only have one maximum
-            setCooperating(maximumPatch.isCooperating());
-        } else if (!list.isEmpty()) {   //If the list isnt empty, then we have multiple maxiums, however this patch is not one of them
-            int whichOne = rand.nextInt(list.size());
-            setCooperating(list.get(whichOne).isCooperating());
-        } else if (maximumPatch == null) { //This patch has a unique higher score than all of its neighbors
-            setCooperating(isCooperating());
-        }
-    }
-   
-    void chooseStrategyBasedOnNeighbors() {
-        Double maximum = score;
-        Patch maximumPatch = null;
-        ArrayList<Patch> list = new ArrayList<Patch>();
-        previousStrategy = isCooperating();
 
         //Find the maximum score, if this patch has the highest then maximumPatch will be null
         for (int i = 0; i < neighbors.size(); i++) {
@@ -137,25 +101,65 @@ class Patch {
                 maximumPatch = neighbors.get(i);
             }
         }
-        
-        for (int i = 0; i < neighbors.size(); i++) {
-            if (maximum == score && maximumPatch != null) { //If maxium equals score and maxiumPatch isnt null, they have the same score
-                list.add(maximumPatch);
-                list.add(this);
+        if (maximumPatch == null) { //If this patch has the highestScore, using the alternitive rule we keep it the same
+            this.setCooperating(this.isCooperating());
+        } else { //If this patch doesnt have the highest score
+            for (int i = 0; i < neighbors.size(); i++) {//Check if any other neighbors share that same high score
+                if (neighbors.get(i).getScore() == maximum && neighbors.get(i) != maximumPatch) { 
+                    list.add(neighbors.get(i)); //If they do add them to a list
+                    foundAnother = true;
+                }
             }
-            if (neighbors.get(i).getScore() == maximum && neighbors.get(i) != maximumPatch) { //Check all the neighbors besides the maximumPatch to see if they are also equal
-                list.add(neighbors.get(i));
+            if (foundAnother) { 
+                list.add(maximumPatch); //Make sure the original max is in the list
+                int pickRandom = rand.nextInt(list.size()); //Then pick a random index on that list
+                setCooperating(list.get(pickRandom).isCooperating());
+            } else {
+                setCooperating(maximumPatch.isCooperating()); //Otherwise maximumPatch has the highest score
             }
         }
+    }
+   
+    void chooseStrategyBasedOnNeighbors() {
+        Double maximum = score;
+        Patch maximumPatch = null;
+        boolean foundAnother = false;
+        ArrayList<Patch> list = new ArrayList<Patch>();
 
-        if (list.isEmpty() && maximumPatch != null){ //If the list is empty and maximumPatch isnt null then we only have one maximum
-            setCooperating(maximumPatch.isCooperating());
-        } else if (!list.isEmpty()) {               //If the list isnt empty, then we have multiple maximums, and we need to pick a random one
-            int whichOne = rand.nextInt(list.size());
-            setCooperating(list.get(whichOne).isCooperating());
-            
-        } else {//Otherwise this patch's score is the highest
-            setCooperating(isCooperating());
-        }   
+        //Find the maximum score, if this patch has the highest then maximumPatch will be null
+        for (int i = 0; i < neighbors.size(); i++) {
+            if (neighbors.get(i).getScore() > maximum) {
+                maximum = neighbors.get(i).getScore();
+                maximumPatch = neighbors.get(i);
+            }
+        }
+        if (maximumPatch == null) { //If this patch has the highestScore, use the alternitive rule and keep it the same
+            for (int i = 0; i < neighbors.size(); i++) {//Check if any other neighbors share that same high score
+                if (neighbors.get(i).getScore() == maximum) { 
+                    list.add(neighbors.get(i)); //If they do add them to a list
+                    foundAnother = true;
+                }
+            }
+            if (foundAnother) {
+                list.add(this); //Make sure not to forget this patch in the list
+                int pickRandom = rand.nextInt(list.size()); //Pick randomly 
+                setCooperating(list.get(pickRandom).isCooperating());
+            }
+        } else {//If this patch doesnt have the highest score
+            for (int i = 0; i < neighbors.size(); i++) //Check if any other neighbors share that same high score
+            {
+                if (neighbors.get(i).getScore() == maximum && neighbors.get(i) != maximumPatch) { 
+                    list.add(neighbors.get(i)); //If they do add them to a list
+                    foundAnother = true;
+                }
+            }
+            if (foundAnother) {//Same as above
+                list.add(maximumPatch);
+                int pickRandom = rand.nextInt(list.size());
+                setCooperating(list.get(pickRandom).isCooperating());
+            } else {
+                setCooperating(maximumPatch.isCooperating());
+            }
+        }
     }
 }
